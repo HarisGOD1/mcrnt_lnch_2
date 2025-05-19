@@ -25,9 +25,7 @@ class MessageDBConTest() {
 
         val repositoryReturnedMessages = repository.findAll()
 
-        println(repositoryReturnedMessages[0].messageContent)
-        println(repositoryReturnedMessages[1].messageContent)
-        println(repositoryReturnedMessages[2].messageContent)
+
         assertEquals(messages[0].messageContent,repositoryReturnedMessages[0].messageContent)
         assertEquals(messages[1].messageContent,repositoryReturnedMessages[1].messageContent)
         assertEquals(messages[2].messageContent,repositoryReturnedMessages[2].messageContent)

@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.Post
 import ru.thegod.messages.MessageRepository
 
 @Controller("/gits")
-class GitRepositoryController(private val repository: GitRepositoryRepository) {
+class GitRepositoryController(private val repository: GitRRepository) {
 
     @Get("/git")
     fun getAllRepositories(): HttpResponse<String> {
