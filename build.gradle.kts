@@ -54,7 +54,10 @@ application {
     mainClass = "ru.thegod.ApplicationKt"
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("17")
+    sourceCompatibility = JavaVersion.toVersion("21")
+}
+kotlin {
+    jvmToolchain(21)
 }
 
 
@@ -83,7 +86,11 @@ micronaut {
         replaceLogbackXml = true
     }
 }
+tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative") {
 
+    jdkVersion = "21"
+
+}
 
 flyway {
 

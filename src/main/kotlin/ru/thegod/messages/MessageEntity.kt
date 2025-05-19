@@ -12,7 +12,7 @@ import jakarta.persistence.Table
 data class MessageEntity(@Id @GeneratedValue
                         val id: Long?=null,
                          @MappedProperty("messagecontent")
-                         val messageContent: String
+                         var messageContent: String
 //                         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 //                         val someLocalDateTime: LocalDateTime
 
