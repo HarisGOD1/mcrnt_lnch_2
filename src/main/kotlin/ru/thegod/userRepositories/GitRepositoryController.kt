@@ -6,14 +6,28 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.serde.annotation.Serdeable
 import io.micronaut.views.View
+import jakarta.inject.Inject
+import ru.thegod.messages.MessageEntity
 
 @Controller("/gits")
-class GitRepositoryController(private val repository: GitRRepository) {
+class GitRepositoryController() {
+    @Inject
+    private lateinit var service: GitRepositoryService
+
 
     @Get("/getAll")
-    fun getAllRepositories(): HttpResponse<String> {
-        return HttpResponse.created(repository.findAll().toString())
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getAllRepositories(): HttpResponse<List<GitRepositoryEntityResponseDTO>> {
+        return HttpResponse.created(service.getAllGitRepositories())
     }
+
+
+    @Get("/get/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun setMessage(id:Long): HttpResponse<GitRepositoryEntityResponseDTO> {
+        return HttpResponse.created(service.getGitRepositoryById(id))
+    }
+
 
     @View("saveGitR.html")
     @Get("/form")
@@ -24,23 +38,13 @@ class GitRepositoryController(private val repository: GitRRepository) {
     }
 
 
-    @Post(uri = "/save", consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
+    @Post(uri = "/save",
+        consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
-    fun saveRepository(@Body gitRepositoryEntityRequestDTO:Request):
+    fun saveRepository(@Body gitRepositoryEntityRequestDTO:GitRepositoryEntityRequestDTO):
             HttpResponse<GitRepositoryEntityResponseDTO> {
 
-        return HttpResponse.created(repository.save(
-            GitRepositoryEntity(gitRepositoryEntityRequestDTO.gitRepositoryName,
-            gitRepositoryEntityRequestDTO.gitOwnerName,
-            gitRepositoryEntityRequestDTO.publicity,
-            gitRepositoryEntityRequestDTO.repositoryDescription)
-        ).toResponseDTO())
+        return HttpResponse.created(service.saveGitRepository(gitRepositoryEntityRequestDTO))
     }
-
-    @Introspected
-    @Serdeable
-    data class Request(val gitRepositoryName: String, val gitOwnerName: String,
-                       val publicity: Boolean, val repositoryDescription:String?)
-
 
 }

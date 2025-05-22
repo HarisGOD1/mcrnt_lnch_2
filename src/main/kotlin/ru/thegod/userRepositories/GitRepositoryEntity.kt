@@ -16,14 +16,24 @@ data class GitRepositoryEntity(@Id @GeneratedValue val id: Long?,
                                @MappedProperty("publicity") var publicity: Boolean,
                                @MappedProperty("membersnames", type= DataType.STRING_ARRAY) var membersNames: MutableList<String>, // TO-DO: make it psql Array
                                @MappedProperty("gitrepositorydescription") var repositoryDescription: String?,
+                               // if this nullable will be null before saving,
+                            // then after get from db this will be empty String
                                @MappedProperty("lastcommitgenerated") var lastCommitGenerated: String?
                                ) {
     constructor(gitRepositoryName: String, gitOwnerName: String, publicity: Boolean, repositoryDescription: String?) :
             this(null,gitRepositoryName,gitOwnerName, publicity,
-                mutableListOf(),repositoryDescription,"")
+                mutableListOf(),repositoryDescription,null)
+
+    constructor(requestDTO: GitRepositoryEntityRequestDTO) :
+            this(requestDTO.gitRepositoryName,requestDTO.gitOwnerName,
+                    requestDTO.publicity,requestDTO.repositoryDescription)
+
+
+
     fun toResponseDTO():GitRepositoryEntityResponseDTO{
         return GitRepositoryEntityResponseDTO(this.id,this.gitRepositoryName,this.gitOwnerName,
             this.publicity,this.membersNames,this.repositoryDescription,this.lastCommitGenerated)
     }
+
 
 }

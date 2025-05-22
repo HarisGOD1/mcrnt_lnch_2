@@ -1,5 +1,6 @@
 package ru.thegod
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
@@ -9,11 +10,9 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import ru.thegod.userRepositories.GitRRepository
-import ru.thegod.userRepositories.GitRepositoryController
-import ru.thegod.userRepositories.GitRepositoryEntity
+import ru.thegod.userRepositories.*
 
-@MicronautTest
+@MicronautTest(transactional = false)
 class GitR_Controller_Test(@Client("/gits") val client: HttpClient) {
 
     @Inject
@@ -27,37 +26,95 @@ class GitR_Controller_Test(@Client("/gits") val client: HttpClient) {
     }
 
     @Test
-        fun `save endpoint works with DB test`(){
-           //TO-DO: replace mutable list, maybe with null
-            var testRep = GitRepositoryEntity(id = null, gitRepositoryName = "ACLManager", gitOwnerName = "thegod", publicity = true,
-               mutableListOf(), repositoryDescription = "linux acl manager based on python", lastCommitGenerated = null)
+    fun `save endpoint works with DB test`(){
+//        TEST DATA
+        var testRepEntity = GitRepositoryEntity(id = null, gitRepositoryName = "ACLManager", gitOwnerName = "thegod", publicity = true,
+           mutableListOf(), repositoryDescription = "linux acl manager based on python", lastCommitGenerated = null)
 
-                val request1: HttpRequest<GitRepositoryController.Request> = HttpRequest.POST("/save",
-                GitRepositoryController.Request(testRep.gitRepositoryName, testRep.gitOwnerName,
-                        testRep.publicity,testRep.repositoryDescription)
-            ).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON)
-//                "gitRepositoryName=${testRep.gitRepositoryName}&" +
-//                    "repositoryDescription=${testRep.repositoryDescription}&" +
-//                    "publicity=${testRep.publicity}&"+
-//                    "gitOwnerName=${testRep.gitOwnerName}")
-            println("HA")
-            val body1 = client.toBlocking().retrieve(request1)
-            assertNotNull(body1)
 
-        println("HA")
-            val savedObjectId = 1L // TO-DO read from page actual ID
+//        PERFORM ACTION
+        val request1: HttpRequest<GitRepositoryEntityRequestDTO> =
+            HttpRequest.POST("/save",
+                GitRepositoryEntityRequestDTO(testRepEntity.gitRepositoryName, testRepEntity.gitOwnerName,
+                    testRepEntity.publicity,testRepEntity.repositoryDescription)
+                ).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON)
+        // body1 contains data in JSON view, type of body1 - Kotlin.String
+        val body1 = client.toBlocking().retrieve(request1)
+        assertNotNull(body1)
 
-        println("HA")
-            val savedObjectFromDBOptional = repository.findById(savedObjectId)
-            assertNotNull(savedObjectFromDBOptional.get())
-            val savedObjectFromDB = savedObjectFromDBOptional.get()
+        val mapper = ObjectMapper()
+        val jsonNode = mapper.readTree(body1)
+        val savedObjectId:Long = jsonNode.get("id").asText().toLong()
 
-            assertEquals(testRep.gitOwnerName,savedObjectFromDB.gitOwnerName)
-            assertEquals(testRep.gitRepositoryName,savedObjectFromDB.gitRepositoryName)
-            assertEquals(testRep.publicity,savedObjectFromDB.publicity)
-            assertEquals(testRep.membersNames,savedObjectFromDB.membersNames)
-            assertEquals(testRep.repositoryDescription,savedObjectFromDB.repositoryDescription)
-            assertEquals(testRep.lastCommitGenerated,savedObjectFromDB.lastCommitGenerated)
+        val savedObjectFromDBOptional = repository.findById(savedObjectId)
+        assertNotNull(savedObjectFromDBOptional.get())
+        val savedObjectFromDB = savedObjectFromDBOptional.get()
+
+//        ASSERT DATA
+        assertEquals(testRepEntity.gitOwnerName,          savedObjectFromDB.gitOwnerName)
+        assertEquals(testRepEntity.gitRepositoryName,     savedObjectFromDB.gitRepositoryName)
+        assertEquals(testRepEntity.publicity,             savedObjectFromDB.publicity)
+        assertEquals(testRepEntity.membersNames,          savedObjectFromDB.membersNames)
+        assertEquals(testRepEntity.repositoryDescription, savedObjectFromDB.repositoryDescription)
+        assertEquals(testRepEntity.lastCommitGenerated,   savedObjectFromDB.lastCommitGenerated)
+
         }
+
+
+    @Test
+    fun `get endpoint works with DB test`(){
+//        TEST DATA
+        var testRepEntity = GitRepositoryEntity(id = null, gitRepositoryName = "Djit_web_project",
+            gitOwnerName = "thegod", publicity = true,
+            mutableListOf("Otterio","Nekro25"), repositoryDescription = "github-like web app",
+            lastCommitGenerated = "added ai")
+
+
+//        PERFORM ACTION
+        val savedObjectFromDB = repository.save(testRepEntity)
+        val request1: HttpRequest<GitRepositoryEntityResponseDTO> = HttpRequest.GET("/get/${savedObjectFromDB.id}")
+        val body1 = client.toBlocking().retrieve(request1)
+        assertNotNull(body1)
+        val mapper = ObjectMapper()
+        val jsonNode = mapper.readTree(body1)
+
+
+//        ASSERT DATA
+        assertEquals(savedObjectFromDB.id,jsonNode.get("id").asLong())
+        assertEquals(savedObjectFromDB.gitOwnerName,jsonNode.get("gitOwnerName").asText())
+        assertEquals(savedObjectFromDB.gitRepositoryName,jsonNode.get("gitRepositoryName").asText())
+        assertEquals(savedObjectFromDB.publicity,jsonNode.get("publicity").asBoolean())
+        for (index in savedObjectFromDB.membersNames.indices){
+            assertEquals(savedObjectFromDB.membersNames[index],jsonNode.get("membersNames")[index].asText())
+        }
+        assertEquals(savedObjectFromDB.repositoryDescription,jsonNode.get("repositoryDescription").asText())
+        assertEquals(savedObjectFromDB.lastCommitGenerated,jsonNode.get("lastCommitGenerated").asText())
+
+    }
+
+    @Test
+    fun `add one member works with DB test`() {
+        var testRepEntity = GitRepositoryEntity(id = null, gitRepositoryName = "Djit_web_project",
+            gitOwnerName = "thegod", publicity = true,
+            mutableListOf("Otterio","Nekro25"), repositoryDescription = "github-like web app",
+            lastCommitGenerated = "added ai")
+
+
+
+        val request1: HttpRequest<List<String>> =
+            HttpRequest.POST("/addMember",listOf("1","otterio")
+            ).contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE).accept(MediaType.APPLICATION_JSON)
+        // body1 contains data in JSON view, type of body1 - Kotlin.String
+        val body1 = client.toBlocking().retrieve(request1)
+        assertNotNull(body1)
+
+        val mapper = ObjectMapper()
+        val jsonNode = mapper.readTree(body1)
+        val savedObjectId:Long = jsonNode.get("id").asText().toLong()
+
+        val savedObjectFromDBOptional = repository.findById(savedObjectId)
+
+    }
+
 
 }
