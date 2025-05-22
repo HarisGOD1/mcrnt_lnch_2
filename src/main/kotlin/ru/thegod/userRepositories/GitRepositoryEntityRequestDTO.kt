@@ -8,11 +8,3 @@ import io.micronaut.serde.annotation.Serdeable
 @Serdeable
 data class GitRepositoryEntityRequestDTO(val gitRepositoryName: String, val gitOwnerName: String,
                                          val publicity: Boolean, val repositoryDescription:String?)
-//null,gitRepositoryName,gitOwnerName, publicity,
-//                mutableListOf(),repositoryDescription,""
-//
-// from controllers request DTO constructor fields:
-//(val gitRepositoryName: String, val gitOwnerName: String,
-//                       val publicity: Boolean, val repositoryDescription:String?)
-
-

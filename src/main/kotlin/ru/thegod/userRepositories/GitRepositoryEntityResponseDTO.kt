@@ -10,3 +10,7 @@ import io.micronaut.serde.annotation.Serdeable
 data class GitRepositoryEntityResponseDTO(val id:Long?,val gitRepositoryName: String, val gitOwnerName: String,
                                          val publicity: Boolean,val membersNames:MutableList<String>,
                                           val repositoryDescription:String?,val lastCommitGenerated: String?)
+{
+    constructor(): this(null,"","",false, mutableListOf(),
+        null,null)
+}

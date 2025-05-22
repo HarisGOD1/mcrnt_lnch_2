@@ -47,4 +47,13 @@ class GitRepositoryController() {
         return HttpResponse.created(service.saveGitRepository(gitRepositoryEntityRequestDTO))
     }
 
+    @Post(uri = "/addMember",
+        consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
+        produces = arrayOf(MediaType.APPLICATION_JSON))
+    fun addMemberInRepository(@Body id_list: GitRepositoryAddMemberListRequestDTO):
+            HttpResponse<GitRepositoryEntityResponseDTO> {
+
+        return HttpResponse.created(service.addMemberInGitRepository(id_list))
+    }
+
 }
