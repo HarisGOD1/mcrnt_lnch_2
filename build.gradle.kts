@@ -3,9 +3,20 @@ buildscript {
         classpath("org.flywaydb:flyway-database-postgresql:11.8.2")
     }
 }
-
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://company/com/maven2")
+    }
+    mavenLocal()
+    flatDir {
+        dirs("libs")
+    }
+}
 
 plugins {
+//    jacoco
+    jacoco
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.25"
     id("com.google.devtools.ksp") version "1.9.25-1.0.20"
@@ -33,7 +44,7 @@ dependencies {
     implementation("io.micronaut.flyway:micronaut-flyway")                  // db part
     implementation("io.micronaut.data:micronaut-data-jdbc")                 // db part
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")                // db part
-
+//    implementation("org.jacoco:jacoco-maven-plugin:0.8.12")
     implementation("io.micronaut.views:micronaut-views-thymeleaf")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
@@ -103,5 +114,7 @@ flyway {
     user = "postgres"
     password = "thegodpsql_pswd"
 }
-
-
+//
+//tasks.test {
+//    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+//}

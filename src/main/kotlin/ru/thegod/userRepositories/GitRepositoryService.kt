@@ -29,17 +29,12 @@ class GitRepositoryService(private val repository: GitRRepository) {
     }
 
     fun addMemberInGitRepository(args: GitRepositoryAddMemberListRequestDTO): GitRepositoryEntityResponseDTO?{
-        try {
-            var entityFromDB = repository.findById(args.repositoryId).get()
-            for (e in args.memberNames){
-                if(!(e in entityFromDB.membersNames))  entityFromDB.membersNames.add(e)
-            }
-
-            return repository.save(entityFromDB).toResponseDTO()
+        var entity = repository.findById(args.repositoryId).get()
+        for (e in args.memberNames){
+            if(!entity.membersNames.contains(e)) entity.membersNames.add(e)
         }
-        catch (e:NoSuchElementException){
-            return null
-        }
+        repository.update(entity)
+        return repository.findById(args.repositoryId).get().toResponseDTO()
     }
 
 }

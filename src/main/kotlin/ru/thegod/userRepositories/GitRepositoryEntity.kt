@@ -26,7 +26,12 @@ data class GitRepositoryEntity(@Id @GeneratedValue val id: Long?,
 
     constructor(requestDTO: GitRepositoryEntityRequestDTO) :
             this(requestDTO.gitRepositoryName,requestDTO.gitOwnerName,
-                    requestDTO.publicity,requestDTO.repositoryDescription)
+                requestDTO.publicity,requestDTO.repositoryDescription)
+
+    constructor(responseDTO: GitRepositoryEntityResponseDTO) :
+            this(responseDTO.id, responseDTO.gitRepositoryName,responseDTO.gitOwnerName,
+                responseDTO.publicity,responseDTO.membersNames,
+                responseDTO.repositoryDescription,responseDTO.lastCommitGenerated)
 
 
 
@@ -35,6 +40,27 @@ data class GitRepositoryEntity(@Id @GeneratedValue val id: Long?,
             this.publicity,this.membersNames,this.repositoryDescription,this.lastCommitGenerated)
     }
 
+
+
+    override fun equals(other: Any?):Boolean{
+        if (this === other) return true
+        if (other !is GitRepositoryEntity) return false
+        // Compares properties for structural equality
+        return (((this.id == other.id) or (this.id==null && other.id != null/* for the case where we wanna check with pre init data*/)
+                    ) &&
+                this.gitRepositoryName == other.gitRepositoryName &&
+                this.gitOwnerName == other.gitOwnerName &&
+                this.publicity == other.publicity &&
+                ((this.repositoryDescription.isNullOrEmpty() == other.repositoryDescription.isNullOrEmpty()) or
+                        (this.repositoryDescription == other.repositoryDescription)) &&
+                ((this.lastCommitGenerated.isNullOrEmpty() == other.lastCommitGenerated.isNullOrEmpty()) or
+                        (this.lastCommitGenerated == other.lastCommitGenerated))&&
+                (if(this.membersNames === other.membersNames) true
+                    else ((this.membersNames.size == other.membersNames.size) &&
+                        (this.membersNames.containsAll(other.membersNames)))
+                        )
+                )
+    }
 
 
 

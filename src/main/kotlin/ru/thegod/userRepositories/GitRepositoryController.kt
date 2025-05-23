@@ -28,13 +28,19 @@ class GitRepositoryController() {
         return HttpResponse.created(service.getGitRepositoryById(id))
     }
 
-
     @View("saveGitR.html")
     @Get("/form")
     @Produces(MediaType.TEXT_HTML)
     fun getSaveForm(): HttpResponse<String> {
         return HttpResponse.ok()
 
+    }
+
+    @View("addMemberForm.html")
+    @Get("/addMemberForm/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    fun addMemberForm(id:Long): HttpResponse<Any> {
+        return HttpResponse.ok(mapOf("repos" to service.getGitRepositoryById(id)))
     }
 
 
@@ -52,7 +58,6 @@ class GitRepositoryController() {
         produces = arrayOf(MediaType.APPLICATION_JSON))
     fun addMemberInRepository(@Body id_list: GitRepositoryAddMemberListRequestDTO):
             HttpResponse<GitRepositoryEntityResponseDTO> {
-
         return HttpResponse.created(service.addMemberInGitRepository(id_list))
     }
 

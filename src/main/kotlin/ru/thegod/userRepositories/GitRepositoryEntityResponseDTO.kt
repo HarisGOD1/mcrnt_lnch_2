@@ -13,4 +13,7 @@ data class GitRepositoryEntityResponseDTO(val id:Long?,val gitRepositoryName: St
 {
     constructor(): this(null,"","",false, mutableListOf(),
         null,null)
+    fun toRepositoryEntity(): GitRepositoryEntity{
+        return GitRepositoryEntity(this)
+    }
 }
