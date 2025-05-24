@@ -111,13 +111,13 @@
 
         <div class="current-members">
             <h4>Current Members:</h4>
-            <div th:each="repmem: ${repos.membersNames}">
+            <div th:each="repmem: ${repos.gitrMembersNames}">
                 <span th:text="${repmem}" class="badge bg-secondary me-2"></span>
             </div>
         </div>
 
         <div th:text="${repos.id}" id="id_holder" style="display: none;"></div>
-        <div th:text="${repos.gitRepositoryName}" class="h4 mb-4"></div>
+        <div th:text="${repos.gitrName}" class="h4 mb-4"></div>
 
         <form id="memberForm">
             <div id="memberFields">
@@ -187,7 +187,7 @@
         const formData = new URLSearchParams();
         formData.append('repositoryId', repositoryId);
         members.forEach((member, index) => {
-            formData.append('memberNames', member);
+            formData.append('gitrMembersNames', member);
         });
 
         console.log(formData.toString())

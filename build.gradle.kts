@@ -112,9 +112,5 @@ flyway {
     cleanDisabled = false
     url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2"
     user = "postgres"
-    password = "thegodpsql_pswd"
+    password =
 }
-//
-//tasks.test {
-//    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
-//}
