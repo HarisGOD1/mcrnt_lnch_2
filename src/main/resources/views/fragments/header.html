@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    ...
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <i class="fas fa-code-branch me-2"></i>Gitr
+            </a>
+            <div class="user-menu">
+                <!-- Thymeleaf will render these based on user session -->
+                <div th:if="${principal == null}">
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/signup" class="nav-link">Sign Up</a>
+                </div>
+                <div th:if="${principal != null}">
+                    <a href="/profile" class="nav-link">
+                        <!--                        <img th:src="${session.user.avatarUrl}" alt="Profile" class="me-2">-->
+                        <span th:text="${principal.name}"></span>
+                    </a>
+                    <a href="/logout" class="nav-link">logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

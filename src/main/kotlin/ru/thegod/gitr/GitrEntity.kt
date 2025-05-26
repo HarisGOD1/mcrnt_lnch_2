@@ -6,8 +6,8 @@ import io.micronaut.data.model.DataType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import ru.thegod.gitr.DTO.GitrEntityRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
+import ru.thegod.gitr.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import java.util.*
 
 

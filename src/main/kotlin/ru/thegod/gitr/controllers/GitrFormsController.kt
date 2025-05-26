@@ -1,13 +1,10 @@
-package ru.thegod.gitr.Controllers
+package ru.thegod.gitr.controllers
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.micronaut.views.View
 import jakarta.inject.Inject
-import ru.thegod.gitr.DTO.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
 import ru.thegod.gitr.service.GitrService
 import java.util.*
 
