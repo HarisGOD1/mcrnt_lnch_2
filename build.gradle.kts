@@ -15,7 +15,6 @@ repositories {
 }
 
 plugins {
-//    jacoco
     jacoco
     id("org.jetbrains.kotlin.jvm") version "1.9.25"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.9.25"
@@ -36,19 +35,29 @@ repositories {
 }
 
 dependencies {
-    ksp("io.micronaut:micronaut-http-validation")
+    ksp("io.micronaut.validation:micronaut-validation-processor")
     ksp("io.micronaut.serde:micronaut-serde-processor")
+    ksp("io.micronaut.data:micronaut-data-processor")
+    ksp("io.micronaut:micronaut-http-validation")
+    ksp("io.micronaut.security:micronaut-security-annotations")
+
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+    implementation("io.micrometer:context-propagation")
 
     implementation("io.micronaut.flyway:micronaut-flyway")                  // db part
     implementation("io.micronaut.data:micronaut-data-jdbc")                 // db part
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")                // db part
-//    implementation("org.jacoco:jacoco-maven-plugin:0.8.12")
+    implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.views:micronaut-views-thymeleaf")
-
+    implementation("io.micronaut.security:micronaut-security-jwt")
+    implementation("io.micronaut.validation:micronaut-validation")
+    implementation("jakarta.validation:jakarta.validation-api")
+//    TO-DO: implement
+//    implementation("io.micronaut.security:micronaut-security-csrf")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+
     compileOnly("io.micronaut:micronaut-http-client")
     compileOnly("jakarta.persistence:jakarta.persistence-api")              // db part
     runtimeOnly("org.flywaydb:flyway-database-postgresql:11.8.2")           // db part
@@ -56,12 +65,18 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.19.0")              // db part
     testImplementation("org.testcontainers:testcontainers:1.19.0")          // db part
     annotationProcessor("io.micronaut.data:micronaut-data-processor")       // db part
+    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+
 
     testImplementation("io.micronaut.test:micronaut-test-junit5")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+//    aotPlugins("io.micronaut.platform:micronaut-platform:4.8.2")
+    aotPlugins("io.micronaut.security:micronaut-security-aot")
+
 }
 
 
@@ -112,5 +127,5 @@ flyway {
     cleanDisabled = false
     url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2"
     user = "postgres"
-    password =
+    password = "thegodpsql_pswd"
 }

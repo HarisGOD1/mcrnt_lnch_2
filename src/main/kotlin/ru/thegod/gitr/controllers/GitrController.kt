@@ -1,16 +1,17 @@
-package ru.thegod.gitr.Controllers
+package ru.thegod.gitr.controllers
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-import io.micronaut.views.View
+import io.micronaut.security.annotation.Secured
+import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
-import ru.thegod.gitr.DTO.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
+import ru.thegod.gitr.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.service.GitrService
 import java.util.*
 
+@Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/gits")
 class GitrController() {
     @Inject

@@ -2,9 +2,9 @@ package ru.thegod.gitr.service
 
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
-import ru.thegod.gitr.DTO.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
+import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
+import ru.thegod.gitr.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import java.util.*
 import kotlin.NoSuchElementException
 

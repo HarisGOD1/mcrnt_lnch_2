@@ -11,12 +11,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import ru.thegod.gitr.service.GitrRepository
-import ru.thegod.gitr.DTO.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
+import ru.thegod.gitr.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.providers.ObjectMapperProvider
 import ru.thegod.gitr.providers.TestObjectsProvider
-import java.util.*
 
 @MicronautTest(transactional = false)
 class GitrControllerTest(@Client("/gits") val client: HttpClient) {

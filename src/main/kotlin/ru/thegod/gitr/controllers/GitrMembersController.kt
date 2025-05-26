@@ -1,4 +1,4 @@
-package ru.thegod.gitr.Controllers
+package ru.thegod.gitr.controllers
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -6,8 +6,8 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import jakarta.inject.Inject
-import ru.thegod.gitr.DTO.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.DTO.GitrEntityResponseDTO
+import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
+import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.service.GitrService
 
 
