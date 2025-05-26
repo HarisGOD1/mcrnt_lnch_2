@@ -2,6 +2,7 @@ package ru.thegod.gitr.providers
 
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
+import ru.thegod.security.User
 import kotlin.random.Random
 
 @Singleton
@@ -17,14 +18,20 @@ object TestObjectsProvider {
         mutableListOf("Bruno","iliazakharchenia","thegod")
 
     )
+    val userMe = User(null,"thegod","ppp", mutableListOf())
+
 
     fun getStaticDefaultGitr(): GitrEntity {
-        return GitrEntity(id = null, gitrName = "TestObjectName", gitrOwnerName = "thegod", publicity = true,
-            mutableListOf(), gitrDescription = "smt in description", gitrCommitGenerated = null)
+        return GitrEntity(id = null, gitrName = "TestObjectName",
+            gitrOwnerName = "thegod", userMe, publicity = true,
+            mutableListOf(),
+            gitrDescription = "smt in description", gitrCommitGenerated = null)
     }
 
     fun getRandomGitr(): GitrEntity {
-        return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(), gitrOwnerName = "thegod", publicity = true,
-            membersListList.random().shuffled().take(listOf(1,2,3).random()).toMutableList(), gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
+        return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
+            gitrOwnerName = "thegod", userMe, publicity = true,
+            membersListList.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
+            gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }
 }

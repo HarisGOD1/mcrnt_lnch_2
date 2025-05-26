@@ -1,8 +1,8 @@
 package ru.thegod.security.service
 
 import io.micronaut.security.authentication.AuthenticationRequest
-import io.micronaut.security.authentication.UsernamePasswordCredentials
 import jakarta.inject.Singleton
+import ru.thegod.security.UserRepository
 
 @Singleton
 class AuthenticationService(private val repository: UserRepository) {

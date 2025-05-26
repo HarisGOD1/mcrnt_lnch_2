@@ -63,7 +63,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
 
         // PERFORM ACTION
         val request1: HttpRequest<GitrAddMembersListRequestDTO> =
-            HttpRequest.POST("/addMember", GitrAddMembersListRequestDTO(savedRepId,listOf("Pod_Jop","Otterio")))
+            HttpRequest.POST("/addMember", GitrAddMembersListRequestDTO(savedRepId, listOf("Pod_Jop", "Otterio")))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
                 .accept(MediaType.APPLICATION_JSON)
         // body1 contains data in JSON view, type of body1 - Kotlin.String

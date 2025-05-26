@@ -8,9 +8,8 @@ import io.micronaut.http.annotation.Produces
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.views.View
-import ru.thegod.gitr.service.GitrRepository
 import ru.thegod.security.User
-import ru.thegod.security.service.UserRepository
+import ru.thegod.security.UserRepository
 import java.security.Principal
 
 @Controller
@@ -43,6 +42,7 @@ class LoginController(private val repository: UserRepository) {
     @Get("/home")
     @Produces(MediaType.TEXT_PLAIN)
     @View("home.html")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     fun index(principal: Principal?): HttpResponse<Any> {
 
         return HttpResponse.ok(mapOf("principal" to principal))
