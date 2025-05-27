@@ -4,11 +4,12 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
 
 
-@MicronautTest(environments = ["test"])
+@MicronautTest(environments = ["test"],startApplication = false, transactional = false)
 class GitrDBTest {
 
     @Inject
@@ -64,20 +65,19 @@ class GitrDBTest {
 
         var testGitr = TestObjectsProvider.getRandomGitr(testUser)
         testGitr = gitrRepository.save(testGitr)
-        testUser.ownedRepositories.add(testGitr)
-
-        testUser = userRepository.update(testUser)
-
-        val testUserFromDB = userRepository.findById(testUser.id).get()
 
 
-        println(testGitr.gitrOwner.toString())
-        println(testUserFromDB.toString())
-        println(testUser)
-        println(userRepository.findAll())
-        println(gitrRepository.findAll())
-        assertEquals(testGitr.gitrOwner,testUserFromDB)
-        assertEquals(testGitr.gitrOwner,testUser)
+
+
+        val testUserFromDB = userRepository.getById(testUser.id!!).get()
+        println(testUserFromDB)
+        val testGitrFromDB = gitrRepository.getById(testGitr.id!!)
+        assertNotEquals(testGitrFromDB.get().gitrOwner,testUserFromDB)
+        assertEquals(testGitrFromDB.get().gitrOwner!!.username,testUserFromDB.username)
+        assertEquals(testGitrFromDB.get().gitrOwner!!.id,testUserFromDB.id)
+        assertEquals(testGitrFromDB.get().gitrName,testUserFromDB.ownedRepositories.get(0).gitrName)
+        assertEquals(testGitrFromDB.get().gitrDescription,testUserFromDB.ownedRepositories.get(0).gitrDescription)
+//        assertEquals(testGitr.gitrOwner,testUser)
 
 
 

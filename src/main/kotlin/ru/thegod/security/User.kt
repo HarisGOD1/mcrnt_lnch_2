@@ -1,12 +1,15 @@
 package ru.thegod.security
 
+import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.annotation.Relation
+import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.GitrEntity
 import java.util.*
 
+@Serdeable
 @MappedEntity
 @Table(name="user_table")
 class User(@Id
@@ -18,13 +21,17 @@ class User(@Id
            @MappedProperty("password_hash")
            val passwordHash:String,
 //           @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-           @Relation(Relation.Kind.ONE_TO_MANY,mappedBy = "gitrOwner", cascade = arrayOf(Relation.Cascade.ALL))
+//           @Relation(Relation.Kind.ONE_TO_MANY,mappedBy = "gitrOwner")
+//           @Nullable
+
+//           @OneToMany(cascade = [CascadeType.ALL]/*mappedBy = "gitrOwner",*/)
            @MappedProperty("ownedrepositories")
+           @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "gitrOwner", cascade = arrayOf(Relation.Cascade.ALL))
            val ownedRepositories:MutableList<GitrEntity> = mutableListOf()
 
            ) {
     override fun toString(): String {
-        return "$id\n$username $ownedRepositories"
+        return "$id\n|$username|$ownedRepositories|"
     }
 
     override fun equals(other: Any?): Boolean {

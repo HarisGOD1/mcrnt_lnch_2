@@ -1,9 +1,11 @@
 package ru.thegod.gitr
 
+import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.annotation.Relation
 import io.micronaut.data.model.DataType
+import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.dto.GitrEntityResponseDTO
@@ -11,15 +13,19 @@ import ru.thegod.security.User
 import java.util.*
 
 
+@Serdeable
 @MappedEntity
 @Table(name="git_repository_list")
 data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
                       @MappedProperty("gitrepository") val gitrName: String,
                       @MappedProperty("gitownername") val gitrOwnerName: String,
 
-                      @Relation(Relation.Kind.MANY_TO_ONE) //fetch = FetchType.LAZY)
-                      @JoinColumn(name="gitrowner_id",referencedColumnName="user_table.id")
-                      val gitrOwner: User,// in db this is field, containing id(uuid) that refere to some User
+//                      @Nullable
+//                      @Relation(Relation.Kind.MANY_TO_ONE) //fetch = FetchType.LAZY)
+//                      @JoinColumn(name="gitrowner_id",referencedColumnName="user_table.id")
+                      @MappedProperty("gitr_owner_id")
+                      @Relation(value = Relation.Kind.MANY_TO_ONE)
+                      val gitrOwner: User?,// in db this is field, containing id(uuid) that refere to some User
 
                       @MappedProperty("publicity") var publicity: Boolean,
                       @MappedProperty("membersnames", type= DataType.STRING_ARRAY) var gitrMembersNames: MutableList<String>, // TO-DO: make it psql Array
@@ -83,8 +89,8 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
 
 
     override fun toString(): String {
-        return  "id:$id\n" +
-                "name:$gitrName, description:$gitrDescription genCommit:$gitrCommitGenerated\n" +
-                "owner:$gitrOwnerName, members:$gitrMembersNames"
+         if (this==null) return  "null"
+         else return "id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
+                "ownerId:${if (gitrOwner!=null) gitrOwner!!.id else "null"}|owner:$gitrOwnerName|members:$gitrMembersNames|"
     }
 }
