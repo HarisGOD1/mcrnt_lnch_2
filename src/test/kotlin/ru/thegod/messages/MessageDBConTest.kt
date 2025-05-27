@@ -1,11 +1,9 @@
-package ru.thegod
+package ru.thegod.messages
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import ru.thegod.messages.MessageEntity
-import ru.thegod.messages.MessageRepository
 
 @MicronautTest(environments = ["test"])
 class MessageDBConTest() {

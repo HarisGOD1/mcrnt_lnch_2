@@ -2,6 +2,7 @@ package ru.thegod.gitr
 
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
+import io.micronaut.data.annotation.Relation
 import io.micronaut.data.model.DataType
 import jakarta.persistence.*
 import ru.thegod.gitr.dto.GitrEntityRequestDTO
@@ -16,7 +17,7 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
                       @MappedProperty("gitrepository") val gitrName: String,
                       @MappedProperty("gitownername") val gitrOwnerName: String,
 
-                      @ManyToOne(fetch = FetchType.LAZY)
+                      @Relation(Relation.Kind.MANY_TO_ONE) //fetch = FetchType.LAZY)
                       @JoinColumn(name="gitrowner_id",referencedColumnName="user_table.id")
                       val gitrOwner: User,// in db this is field, containing id(uuid) that refere to some User
 
@@ -81,5 +82,9 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
     }
 
 
-
+    override fun toString(): String {
+        return  "id:$id\n" +
+                "name:$gitrName, description:$gitrDescription genCommit:$gitrCommitGenerated\n" +
+                "owner:$gitrOwnerName, members:$gitrMembersNames"
+    }
 }

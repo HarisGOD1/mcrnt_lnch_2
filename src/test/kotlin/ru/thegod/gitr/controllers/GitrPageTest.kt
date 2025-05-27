@@ -1,4 +1,4 @@
-package ru.thegod.gitr
+package ru.thegod.gitr.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
@@ -7,7 +7,7 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import ru.thegod.gitr.providers.TestObjectsProvider
+import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.gitr.service.GitrRepository
 
 @MicronautTest(transactional = false)

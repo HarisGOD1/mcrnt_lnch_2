@@ -19,6 +19,7 @@ class GitrController() {
 
 
     @Get("/getAll")
+    @Secured(SecurityRule.IS_ANONYMOUS)     // ONLY FOR DEVELOPMENT
     @Produces(MediaType.APPLICATION_JSON)
     fun getAllRepositories(): HttpResponse<List<GitrEntityResponseDTO>> {
         return HttpResponse.created(service.getAllGitrEntities_toDTO())
@@ -27,7 +28,8 @@ class GitrController() {
 
     @Get("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun setMessage(id: UUID): HttpResponse<GitrEntityResponseDTO> {
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    fun getById(id: UUID): HttpResponse<GitrEntityResponseDTO> {
         return HttpResponse.created(service.getGitrById(id))
     }
 

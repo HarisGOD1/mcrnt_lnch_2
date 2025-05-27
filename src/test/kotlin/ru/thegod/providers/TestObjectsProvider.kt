@@ -1,4 +1,4 @@
-package ru.thegod.gitr.providers
+package ru.thegod.providers
 
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
@@ -20,6 +20,9 @@ object TestObjectsProvider {
     )
     val userMe = User(null,"thegod","ppp", mutableListOf())
 
+    fun getRandomUser():User{
+        return User(null, membersListList.random().random(),"ppp", mutableListOf())
+    }
 
     fun getStaticDefaultGitr(): GitrEntity {
         return GitrEntity(id = null, gitrName = "TestObjectName",
@@ -31,6 +34,13 @@ object TestObjectsProvider {
     fun getRandomGitr(): GitrEntity {
         return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
             gitrOwnerName = "thegod", userMe, publicity = true,
+            membersListList.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
+            gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
+    }
+
+    fun getRandomGitr(owner: User): GitrEntity {
+        return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
+            gitrOwnerName = owner.username, owner, publicity = true,
             membersListList.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
             gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }

@@ -1,4 +1,4 @@
-package ru.thegod.gitr.providers
+package ru.thegod.providers
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.inject.Singleton
