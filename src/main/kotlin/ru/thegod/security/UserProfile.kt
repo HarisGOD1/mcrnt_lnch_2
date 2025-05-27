@@ -3,7 +3,6 @@ package ru.thegod.security
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import jakarta.persistence.*
-import jakarta.validation.constraints.Email
 import ru.thegod.gitr.GitrEntity
 import java.util.*
 //

@@ -37,7 +37,6 @@ repositories {
 
 dependencies {
     ksp("io.micronaut:micronaut-http-validation")
-    ksp("io.micronaut.security:micronaut-security-annotations")
     ksp("io.micronaut.serde:micronaut-serde-processor")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
@@ -49,7 +48,6 @@ dependencies {
 //    implementation("org.jacoco:jacoco-maven-plugin:0.8.12")
     implementation("io.micronaut.views:micronaut-views-thymeleaf")
     implementation("io.micronaut.reactor:micronaut-reactor")
-    implementation("io.micronaut.security:micronaut-security-session")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
@@ -114,7 +112,7 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 flyway {
 
     cleanDisabled = false
-    url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2_security_session"
+    url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2_security_jwt_handmade"
     user = "postgres"
     password = "thegodpsql_pswd"
 }
