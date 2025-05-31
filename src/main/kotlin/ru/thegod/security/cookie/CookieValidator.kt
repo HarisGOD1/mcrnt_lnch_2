@@ -1,8 +1,10 @@
 package ru.thegod.security.cookie
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import java.time.Clock
 import java.util.*
 
 /*
@@ -25,23 +27,29 @@ class CookieValidator {
     private lateinit var cryptImpl:CryptImpl
     // examples https://datatracker.ietf.org/doc/html/rfc6265#section-3.1
     //Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
-    fun returnUsernameIfAuthCookieValid(cookie:String):String?{
-        println(cookie)
-        val blocks = cookie.split(".")
+    fun returnUsernameIfAuthTokenValid(token: Cookie):String?{
+
+//        println(cookie)
+        val blocks = token.value.split(".")
+
         val headerJSON = String(Base64.getDecoder().decode(blocks.get(0)))
         val payloadJSON = String(Base64.getDecoder().decode(blocks.get(1)))
         val signatureCrypt = String(Base64.getDecoder().decode(blocks.get(2)))
-        val payloadMap: Map<String, Any> = objectMapper.readValue(payloadJSON, Map::class.java) as Map<String, Any>
+        val payloadMap: Map<String, Any>? = objectMapper.readValue(payloadJSON, Map::class.java) as? Map<String, Any>
+//        println(((payloadMap["expiries"].toString()).toLong()))
+//        println(Clock.systemUTC().millis())
+        if(payloadMap==null) return null
 
-
+        if(Clock.systemUTC().millis()> ((payloadMap["expires"].toString()).toLong()))
+            return null
         val signature = cryptImpl.decrypt(signatureCrypt)
         if ((headerJSON+"."+payloadJSON)==signature)
             return payloadMap["username"].toString()
         else return null
     }
-    fun getUsernameFromCookie(cookie:String):String{
-        return ""
-    }
+//    fun getUsernameFromCookie(cookie:String):String{
+//        return ""
+//    }
 
     // Verification checks if a product or process is built according to the specified requirements, while
     // Validation checks if the product or process actually meets the intended needs and user expectations

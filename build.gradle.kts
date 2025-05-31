@@ -112,7 +112,7 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 flyway {
 
     cleanDisabled = false
-    url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2_security_jwt_handmade"
+    url = "jdbc:postgresql://localhost:5433/mcrnt_sec_jwt"
     user = "postgres"
     password = "thegodpsql_pswd"
 }

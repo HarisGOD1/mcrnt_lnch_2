@@ -26,23 +26,24 @@ class CookieTokenProvider {
     @Inject
     private lateinit var cryptImpl:CryptImpl
 
-
-    //
-    fun releaseCookie(username:String,role:String): Cookie{
-        val header = mapOf("alg" to "HS256","typ" to "JWT")
+    fun generateToken(username: String, role: String, expires:Long):String{
+        val header = mapOf("alg" to "AES/GCM/NoPadding","typ" to "JWT")
         val headerJSON = objectMapper.writeValueAsString(header)
         val payloadJSON=objectMapper.writeValueAsString(
             mapOf("username" to username,
-                  "role" to role))
+                "role" to role,
+                "expires" to expires))
         val signature: String = cryptImpl.encrypt(headerJSON+"."+payloadJSON)
 
         val tokenValue = Base64.getEncoder().encodeToString(headerJSON.toByteArray())+"."+
                 Base64.getEncoder().encodeToString(payloadJSON.toByteArray())+"."+
                 Base64.getEncoder().encodeToString(signature.toByteArray())
-
+        return tokenValue
+    }
+    //
+    fun releaseCookie(username:String,role:String): Cookie{
 //        val setCookieString:String = "thegodtoken="+tokenValue+"; Path=/; HttpOnly; Secure; SameSite=Strict"
-
-        val cookie = Cookie.of("AUTH-TOKEN", tokenValue)
+        val cookie = Cookie.of("AUTH-TOKEN", generateToken(username,role,3600000))
             .httpOnly(true)
             .secure(true)
             .path("/")

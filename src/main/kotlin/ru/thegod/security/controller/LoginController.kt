@@ -11,22 +11,16 @@ import ru.thegod.security.User
 import ru.thegod.security.UserRepository
 import ru.thegod.security.cookie.CookieTokenProvider
 import ru.thegod.security.cookie.CookieValidator
+import ru.thegod.security.service.LoginService
 import ru.thegod.security.service.passwordEncryptService
 import java.net.URI
 
 @Controller
 class LoginController(private val repository: UserRepository,
                       private val cookieTokenProvider: CookieTokenProvider,
-                      private val cookieValidator: CookieValidator) {
-
-//    @Get("/profile")
-//    @Produces(MediaType.TEXT_PLAIN)
-////    @Secured(SecurityRule.IS_AUTHENTICATED)
-//    fun profile(principal: Principal): String = "${principal.name}\n${principal}"
-
-
-
-    @Get("/reg/{un}/{ph}")
+                      private val cookieValidator: CookieValidator,
+                      private val loginService: LoginService) {
+    @Get("/reg/{un}/{ph}") // TO-DO: replace
     @Produces(MediaType.TEXT_PLAIN)
     fun register_dumb(un:String, ph:String){
         repository.save(User(null,un,ph))
@@ -37,30 +31,16 @@ class LoginController(private val repository: UserRepository,
     fun login_dumb(){
 
     }
+
     @Post("/login")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun login(username:String, password:String):HttpResponse<Any>{
-        val user = repository.findByUsername(username) ?: return HttpResponse.unauthorized()
-
-        if(passwordEncryptService.passwordToHash(password)==user.passwordHash)
-            return HttpResponse.redirect<Any?>(URI("/profile")).cookie(cookieTokenProvider.releaseCookie(username,"user"))
-        else return HttpResponse.unauthorized()
+        return loginService.login(username,password)
     }
     @Get("/profile")
     @Produces(MediaType.TEXT_PLAIN)
     fun profilePage(request: HttpRequest<*>): HttpResponse<String>{
-        val token = request.cookies["AUTH-TOKEN"]?.value
-
-        return if (token != null) {
-            val username = cookieValidator.returnUsernameIfAuthCookieValid(token)
-            if (username!=null) {
-                return HttpResponse.ok("Token is valid, ${username}")
-            }
-            return HttpResponse.unauthorized()
-        }
-        else{
-            return HttpResponse.unauthorized()
-        }
+        return loginService.profilePage(request)
 
     }
 
