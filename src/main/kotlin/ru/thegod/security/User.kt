@@ -7,6 +7,7 @@ import io.micronaut.data.annotation.Relation
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.GitrEntity
+import ru.thegod.security.service.passwordEncryptService.md5
 import java.util.*
 
 @Serdeable
@@ -19,7 +20,7 @@ class User(@Id
            @Column(unique=true)
            val username:String,
            @MappedProperty("password_hash")
-           val passwordHash:String,
+           var passwordHash:String,
 //           @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //           @Relation(Relation.Kind.ONE_TO_MANY,mappedBy = "gitrOwner")
 //           @Nullable
@@ -54,6 +55,11 @@ class User(@Id
             )
         return true
         else return false
+    }
+
+    @Transient
+    fun getSecurityHash(): String{
+        return (username+passwordHash).md5()
     }
 
 }

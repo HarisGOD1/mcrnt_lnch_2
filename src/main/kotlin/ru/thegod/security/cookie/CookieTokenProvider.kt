@@ -6,6 +6,9 @@ import io.micronaut.http.cookie.Cookie
 import io.micronaut.http.cookie.SameSite
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import ru.thegod.security.User
+import ru.thegod.security.UserRepository
+import java.time.Clock
 import java.time.Duration
 
 // AES/GCM
@@ -17,7 +20,7 @@ import java.time.Duration
 // Signature: generated using the header, payload, and secret key
 
 @Singleton
-class CookieTokenProvider {
+class CookieTokenProvider(private val userRepository: UserRepository) {
 
     private val objectMapper: ObjectMapper by lazy{
         ObjectMapper()
@@ -26,13 +29,19 @@ class CookieTokenProvider {
     @Inject
     private lateinit var cryptImpl:CryptImpl
 
-    fun generateToken(username: String, role: String, expires:Long):String{
+    // generates token-value aka
+    fun generateToken(user: User, role: String, expiresTime:Long):String{
+
         val header = mapOf("alg" to "AES/GCM/NoPadding","typ" to "JWT")
         val headerJSON = objectMapper.writeValueAsString(header)
+
         val payloadJSON=objectMapper.writeValueAsString(
-            mapOf("username" to username,
+            mapOf("username" to user.username,
                 "role" to role,
-                "expires" to expires))
+                "expires" to Clock.systemUTC().millis()+expiresTime,
+                "security_hash" to user.getSecurityHash())
+        )
+
         val signature: String = cryptImpl.encrypt(headerJSON+"."+payloadJSON)
 
         val tokenValue = Base64.getEncoder().encodeToString(headerJSON.toByteArray())+"."+
@@ -41,9 +50,9 @@ class CookieTokenProvider {
         return tokenValue
     }
     //
-    fun releaseCookie(username:String,role:String): Cookie{
+    fun releaseCookie(user: User, role:String): Cookie{
 //        val setCookieString:String = "thegodtoken="+tokenValue+"; Path=/; HttpOnly; Secure; SameSite=Strict"
-        val cookie = Cookie.of("AUTH-TOKEN", generateToken(username,role,3600000))
+        val cookie = Cookie.of("AUTH-TOKEN", generateToken(user,role,3600000))
             .httpOnly(true)
             .secure(true)
             .path("/")

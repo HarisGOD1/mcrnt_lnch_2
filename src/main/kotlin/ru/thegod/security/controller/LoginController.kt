@@ -13,6 +13,7 @@ import ru.thegod.security.cookie.CookieTokenProvider
 import ru.thegod.security.cookie.CookieValidator
 import ru.thegod.security.service.LoginService
 import ru.thegod.security.service.passwordEncryptService
+import ru.thegod.security.service.passwordEncryptService.md5
 import java.net.URI
 
 @Controller
@@ -23,7 +24,7 @@ class LoginController(private val repository: UserRepository,
     @Get("/reg/{un}/{ph}") // TO-DO: replace
     @Produces(MediaType.TEXT_PLAIN)
     fun register_dumb(un:String, ph:String){
-        repository.save(User(null,un,ph))
+        repository.save(User(null,un,ph.md5()))
     }
     @Get("/login")
     @View("security/login.html")

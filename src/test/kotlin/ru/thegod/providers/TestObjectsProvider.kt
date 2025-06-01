@@ -3,6 +3,7 @@ package ru.thegod.providers
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
 import ru.thegod.security.User
+import ru.thegod.security.service.passwordEncryptService.md5
 import kotlin.random.Random
 
 @Singleton
@@ -18,10 +19,13 @@ object TestObjectsProvider {
         mutableListOf("Bruno","iliazakharchenia","thegod")
 
     )
-    val userMe = User(null,"thegod","ppp", mutableListOf())
+    val userMe = User(null,"thegod","ppp".md5(), mutableListOf())
 
     fun getRandomUser():User{
-        return User(null, membersListList.random().random(),"ppp", mutableListOf())
+        return User(null, membersListList.random().random(),"ppp".md5(), mutableListOf())
+    }
+    fun getRandomUser(password:String):User{
+        return User(null, membersListList.random().random(),password.md5(), mutableListOf())
     }
 
     fun getStaticDefaultGitr(): GitrEntity {
