@@ -20,8 +20,9 @@ class GitrMembersController() {
     @Post(uri = "/addMember",
         consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
-    fun addMemberInRepository(@Body id_list: GitrAddMembersListRequestDTO):
+    fun addMemberInRepository(@Body id_list: GitrAddMembersListRequestDTO, request:HttpResponse<*>):
             HttpResponse<GitrEntityResponseDTO> {
-        return HttpResponse.created(service.addMemberInGitr(id_list))
+        val token = request.cookies["AUTH-TOKEN"]
+        return HttpResponse.created(service.addMemberInGitr(id_list,token))
     }
 }

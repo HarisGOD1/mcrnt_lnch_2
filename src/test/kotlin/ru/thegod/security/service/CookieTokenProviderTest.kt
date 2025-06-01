@@ -1,7 +1,5 @@
 package ru.thegod.security.service
 
-import io.micronaut.http.cookie.Cookie
-import io.micronaut.http.cookie.SameSite
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -12,7 +10,6 @@ import ru.thegod.security.cookie.CryptImpl
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
-import java.time.Duration
 import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
@@ -29,22 +26,11 @@ class CookieTokenProviderTest {
 
     @Test
     fun `test provider`(){
-        val user = TestObjectsProvider.userMe
-        val cookie = cookieTokenProvider.releaseCookie(user,"role")
-//        val key = cryptImpl.getKeyFromPassword("stri","sal")
-
-//        val cookie = Cookie.of("AUTH-TOKEN", tokenValue)
-//            .httpOnly(true)
-//            .secure(true)
-//            .path("/")
-//            .maxAge(Duration.ofHours(1))
-//            .sameSite(SameSite.Strict)
+        val user = TestObjectsProvider.USER_ME
+        val cookie = cookieTokenProvider.releaseCookie(user,"user")
         assertEquals(true,cookie.isHttpOnly)
         assertEquals(true,cookie.isSecure)
         assertEquals("AUTH-TOKEN",cookie.name)
-
-//        var text_encrypted = cookieTokenProvider.encrypt()
-
     }
 
     @Test

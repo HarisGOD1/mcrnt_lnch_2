@@ -39,7 +39,7 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
                 mutableListOf(),repositoryDescription,null)
 
     constructor(requestDTO: GitrEntityRequestDTO) :
-            this(requestDTO.gitrName,requestDTO.gitrOwnerName,requestDTO.gitrOwner!!,
+            this(requestDTO.gitrName,requestDTO.gitrOwner.username,requestDTO.gitrOwner,
                 requestDTO.publicity,requestDTO.gitrDescription)
 
     constructor(responseDTO: GitrEntityResponseDTO) :

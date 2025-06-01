@@ -1,11 +1,14 @@
 package ru.thegod.gitr.service
 
+import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
 import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
 import ru.thegod.gitr.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.dto.GitrEntityResponseDTO
+import ru.thegod.security.User
 import ru.thegod.security.UserRepository
+import ru.thegod.security.cookie.CookieValidator
 import java.nio.file.attribute.UserPrincipalNotFoundException
 import java.security.Principal
 import java.util.*
@@ -13,7 +16,8 @@ import kotlin.NoSuchElementException
 
 @Singleton
 class GitrService(private val gitrRepository: GitrRepository,
-                    private val userRepository: UserRepository) {
+                    private val userRepository: UserRepository,
+                    private val cookieValidator: CookieValidator) {
 
     fun getAllGitrEntities_toDTO():List<GitrEntityResponseDTO>{
         return gitrRepository.findAll().map { entity -> entity.toResponseDTO() }
@@ -29,20 +33,24 @@ class GitrService(private val gitrRepository: GitrRepository,
         }
     }
 
-    fun saveGitr(gitrEntityRequestDTO: GitrEntityRequestDTO,principal: Principal): GitrEntityResponseDTO {
-        val userRequester = userRepository.findByUsername(principal.name)
+    fun saveGitr(gitrEntityRequestDTO: GitrEntityRequestDTO,userRequester:User?): GitrEntityResponseDTO {
+//        val userRequester = userRepository.findByUsername(principal.name)
         if (userRequester==null) throw Exception("Username not exist/ not found")
         return gitrRepository.save(
             GitrEntity(gitrEntityRequestDTO.gitrName,
-                gitrEntityRequestDTO.gitrOwnerName,
+                userRequester.username!!,
                 userRequester,
                 gitrEntityRequestDTO.publicity,
                 gitrEntityRequestDTO.gitrDescription)
         ).toResponseDTO()
     }
 
-    fun addMemberInGitr(args: GitrAddMembersListRequestDTO): GitrEntityResponseDTO?{
+    fun addMemberInGitr(args: GitrAddMembersListRequestDTO,token: Cookie): GitrEntityResponseDTO?{
+        val user = cookieValidator.returnUserIfAuthTokenValid(token)?:return null
         var entity = gitrRepository.findById(args.repositoryId).get()
+        if (user!=entity.gitrOwner) return null
+
+
         for (e in args.gitrMembersNames){
             if(!entity.gitrMembersNames.contains(e)) entity.gitrMembersNames.add(e)
         }

@@ -8,10 +8,10 @@ import ru.thegod.security.User
 //@JvmRecord
 @Introspected
 @Serdeable
-data class GitrEntityRequestDTO(val gitrName: String, val gitrOwnerName: String, val gitrOwner: User?,
-                                val publicity: Boolean, val gitrDescription:String?){
-    constructor(gitrEntity:GitrEntity) : this(gitrEntity.gitrName,gitrEntity.gitrOwnerName,
-        gitrEntity.gitrOwner, gitrEntity.publicity,gitrEntity.gitrDescription)
+data class GitrEntityRequestDTO(val gitrName: String, val gitrOwner: User,
+                                val publicity: Boolean, val gitrDescription:String){
+    constructor(gitrEntity:GitrEntity) : this(gitrEntity.gitrName,
+        gitrEntity.gitrOwner!!, gitrEntity.publicity,gitrEntity.gitrDescription!!)
 
 }
 

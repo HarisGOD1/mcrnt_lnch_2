@@ -2,11 +2,10 @@ package ru.thegod.security.service
 
 import java.security.MessageDigest
 
-object passwordEncryptService {
+object PasswordEncryptService {
     fun passwordToHash(password: String):String{
         return password.md5()
     }
-
 
     @OptIn(ExperimentalStdlibApi::class)
     fun String.md5(): String {

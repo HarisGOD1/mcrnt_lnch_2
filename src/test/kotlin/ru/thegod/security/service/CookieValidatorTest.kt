@@ -9,8 +9,8 @@ import ru.thegod.security.UserRepository
 import ru.thegod.security.cookie.CookieTokenProvider
 import ru.thegod.security.cookie.CookieValidator
 import ru.thegod.security.cookie.CryptImpl
-import ru.thegod.security.service.passwordEncryptService.md5
-
+import ru.thegod.security.service.PasswordEncryptService.md5
+// MAKING TRANSACTION FALSE DOESNT CLEAR THE REPOSITORIES
 @MicronautTest
 class CookieValidatorTest {
     @Inject
@@ -26,7 +26,7 @@ class CookieValidatorTest {
     @Suppress("UNCHECKED_CAST")
     @Test
     fun `test real cookie is validated`(){
-        val user = userRepository.save(TestObjectsProvider.userMe)
+        val user = userRepository.save(TestObjectsProvider.USER_ME)
         assertNotNull(user)
         val cookie = cookieTokenProvider.releaseCookie(user,"user")
 //        println(userRepository.findAll())
@@ -38,20 +38,19 @@ class CookieValidatorTest {
 
     @Test
     fun `test cookie securityHash invalidated`(){
-        println(userRepository.findAll())
-        var user = userRepository.save(TestObjectsProvider.userMe)
+//        println(userRepository.findAll())
+        var user = userRepository.save(TestObjectsProvider.USER_ME)
         assertNotNull(user)
         val cookie = cookieTokenProvider.releaseCookie(user,"user")
-//        println(userRepository.findAll())
         user.passwordHash="anotherpassword".md5()
         userRepository.update(user)
 
 
         val userFromToken = cookieValidator.returnUserIfAuthTokenValid(cookie)
         assertNull(userFromToken)
-//        assertNotEquals(user.username,userFromToken!!.username)
 
     }
+
 
 
 }

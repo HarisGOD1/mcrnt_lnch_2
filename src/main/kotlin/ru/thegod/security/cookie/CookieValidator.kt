@@ -34,7 +34,9 @@ import java.util.*
 *       and the other tokens will be not valid in later usage
  */
 @Singleton
-class CookieValidator (private val userRepository: UserRepository){
+class CookieValidator (private val userRepository: UserRepository,
+                       private val expiredTokenStorage: ExpiredTokenStorage
+){
     private val objectMapper: ObjectMapper by lazy{
         ObjectMapper()
     }
@@ -46,17 +48,26 @@ class CookieValidator (private val userRepository: UserRepository){
     fun returnUserIfAuthTokenValid(token: Cookie): User?{
         val (headerJSON,payloadJSON,signature) = extractPayload(token)
         val payloadMap = objectMapper.readValue(payloadJSON, Map::class.java) as? Map<String, Any>
-//        println(payloadJSON)
-//        println(payloadMap.toString())
-//        println(Clock.systemUTC().millis())
 
+        // TO-DO: extract to two methods: validate and verify
         if(payloadMap==null) return null
+        if(!expiredTokenStorage.getSingleExpiredToken(token.value).isEmpty) return null
 
-        if(Clock.systemUTC().millis()> ((payloadMap["expires"].toString()).toLong()))
+        val bornTime = getBornTimeFromPayloadMap(payloadMap)
+        val username = getUsernameFromPayloadMap(payloadMap)
+        val securityHash = getSecurityHashFromPayloadMap(payloadMap)
+
+        val lastAllExpired=expiredTokenStorage.getAllExpiredTime(username)
+
+        if(!lastAllExpired.isEmpty)
+            if(bornTime<lastAllExpired.get().toLong())
+                return null
+
+        if(Clock.systemUTC().millis()> (bornTime+3600000))
             return null
 
-        val user = userRepository.findByUsername(payloadMap["username"].toString()) ?: return null
-        if (payloadMap["security_hash"] != user.getSecurityHash()) return null
+        val user = userRepository.findByUsername(username) ?: return null
+        if (securityHash != user.securityHash()) return null
 
         if ((headerJSON+"."+payloadJSON)==signature)
             return user
@@ -74,9 +85,18 @@ class CookieValidator (private val userRepository: UserRepository){
         return Triple(headerJSON,payloadJSON,signature)
     }
 
-//    fun getUsernameFromCookie(cookie:String):String{
-//        return ""
-//    }
+    fun getBornTimeFromPayloadMap(payloadMap:Map<String,Any>):Long{
+        return payloadMap["born"].toString().toLong()
+    }
+
+    fun getUsernameFromPayloadMap(payloadMap:Map<String,Any>):String{
+        return payloadMap["username"].toString()
+    }
+    fun getSecurityHashFromPayloadMap(payloadMap:Map<String,Any>):String{
+        return payloadMap["security_hash"].toString()
+    }
+
+
 
     // Verification checks if a product or process is built according to the specified requirements, while
     // Validation checks if the product or process actually meets the intended needs and user expectations

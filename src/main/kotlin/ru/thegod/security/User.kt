@@ -1,16 +1,17 @@
 package ru.thegod.security
 
-import io.micronaut.core.annotation.Nullable
+import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.annotation.Relation
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.GitrEntity
-import ru.thegod.security.service.passwordEncryptService.md5
+import ru.thegod.security.service.PasswordEncryptService.md5
 import java.util.*
 
 @Serdeable
+@Introspected
 @MappedEntity
 @Table(name="user_table")
 class User(@Id
@@ -31,6 +32,11 @@ class User(@Id
            val ownedRepositories:MutableList<GitrEntity> = mutableListOf()
 
            ) {
+    constructor(id:UUID,username: String,passwordHash: String) :
+            this(id,username,passwordHash, mutableListOf())
+    constructor(username:String,passwordHash: String):
+            this(null,username,passwordHash, mutableListOf())
+
     override fun toString(): String {
         return "$id\n|$username|$ownedRepositories|"
     }
@@ -58,7 +64,7 @@ class User(@Id
     }
 
     @Transient
-    fun getSecurityHash(): String{
+    fun securityHash(): String{
         return (username+passwordHash).md5()
     }
 

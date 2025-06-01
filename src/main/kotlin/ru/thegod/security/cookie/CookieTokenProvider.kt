@@ -30,7 +30,7 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
     private lateinit var cryptImpl:CryptImpl
 
     // generates token-value aka
-    fun generateToken(user: User, role: String, expiresTime:Long):String{
+    fun generateToken(user: User, role: String):String{
 
         val header = mapOf("alg" to "AES/GCM/NoPadding","typ" to "JWT")
         val headerJSON = objectMapper.writeValueAsString(header)
@@ -38,8 +38,8 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
         val payloadJSON=objectMapper.writeValueAsString(
             mapOf("username" to user.username,
                 "role" to role,
-                "expires" to Clock.systemUTC().millis()+expiresTime,
-                "security_hash" to user.getSecurityHash())
+                "born" to Clock.systemUTC().millis(),
+                "security_hash" to user.securityHash())
         )
 
         val signature: String = cryptImpl.encrypt(headerJSON+"."+payloadJSON)
@@ -52,7 +52,7 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
     //
     fun releaseCookie(user: User, role:String): Cookie{
 //        val setCookieString:String = "thegodtoken="+tokenValue+"; Path=/; HttpOnly; Secure; SameSite=Strict"
-        val cookie = Cookie.of("AUTH-TOKEN", generateToken(user,role,3600000))
+        val cookie = Cookie.of("AUTH-TOKEN", generateToken(user,role))
             .httpOnly(true)
             .secure(true)
             .path("/")
@@ -60,7 +60,20 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
             .sameSite(SameSite.Strict)
 
         return cookie
+    }
 
+    fun releaseCookie(user: User):Cookie {
+        return releaseCookie(user, "user")
+    }
+
+    fun releaseExpiredCookie():Cookie{
+        val cookie = Cookie.of("AUTH-TOKEN", "empty")
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(Duration.ofMillis(1))
+            .sameSite(SameSite.Strict)
+        return cookie
     }
 
 }

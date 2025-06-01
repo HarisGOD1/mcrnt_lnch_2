@@ -1,5 +1,6 @@
 package ru.thegod.gitr.controllers
 
+import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
@@ -9,6 +10,7 @@ import jakarta.inject.Inject
 import ru.thegod.gitr.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.service.GitrService
+import ru.thegod.security.cookie.CookieValidator
 import java.security.Principal
 import java.util.*
 
@@ -16,10 +18,11 @@ import java.util.*
 class GitrController() {
     @Inject
     private lateinit var service: GitrService
+    @Inject
+    private lateinit var cookieValidator: CookieValidator
 
 
     @Get("/getAll")
-//    @Secured(SecurityRule.IS_ANONYMOUS)     // ONLY FOR DEVELOPMENT
     @Produces(MediaType.APPLICATION_JSON)
     fun getAllRepositories(): HttpResponse<List<GitrEntityResponseDTO>> {
         return HttpResponse.created(service.getAllGitrEntities_toDTO())
@@ -28,20 +31,21 @@ class GitrController() {
 
     @Get("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-//    @Secured(SecurityRule.IS_ANONYMOUS)
     fun getById(id: UUID): HttpResponse<GitrEntityResponseDTO> {
         return HttpResponse.created(service.getGitrById(id))
     }
 
 
     @Post(uri = "/save",
-        consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
+        consumes = arrayOf(MediaType.APPLICATION_JSON),
         produces = arrayOf(MediaType.APPLICATION_JSON))
-//    @Secured(SecurityRule.IS_AUTHENTICATED)
-    fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO,principal:Principal):
+    fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO,request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
 
-        return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,principal))
+
+
+        return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,
+            cookieValidator.returnUserIfAuthTokenValid(request.cookies["AUTH-TOKEN"])))
     }
 
 

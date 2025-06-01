@@ -48,6 +48,7 @@ dependencies {
 //    implementation("org.jacoco:jacoco-maven-plugin:0.8.12")
     implementation("io.micronaut.views:micronaut-views-thymeleaf")
     implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.micronaut.redis:micronaut-redis-lettuce")            // security
 
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
