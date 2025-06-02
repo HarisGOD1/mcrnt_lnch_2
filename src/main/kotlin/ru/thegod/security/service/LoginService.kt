@@ -72,7 +72,7 @@ class LoginService(private val repository: UserRepository,
         if(user==null) return HttpResponse.unauthorized()
 
 
-        expiredTokenStorage.putAllExpiredTime(user.username!!, Clock.systemUTC().millis())
+        expiredTokenStorage.putAllExpiredTime(user.username, Clock.systemUTC().millis())
         return HttpResponse.redirect<Any?>(URI("/logoutSuccess"))
             .cookie(cookieTokenProvider.releaseExpiredCookie())
 

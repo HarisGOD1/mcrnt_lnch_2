@@ -38,19 +38,19 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
             this(null,gitRepositoryName,gitOwnerName,gitrOwner, publicity,
                 mutableListOf(),repositoryDescription,null)
 
-    constructor(requestDTO: GitrEntityRequestDTO) :
-            this(requestDTO.gitrName,requestDTO.gitrOwner.username,requestDTO.gitrOwner,
-                requestDTO.publicity,requestDTO.gitrDescription)
+//    constructor(requestDTO: GitrEntityRequestDTO) :
+//            this(requestDTO.gitrName,requestDTO.gitrOwner.username,requestDTO.gitrOwner,
+//                requestDTO.publicity,requestDTO.gitrDescription)
 
     constructor(responseDTO: GitrEntityResponseDTO) :
-            this(responseDTO.id, responseDTO.gitrName,responseDTO.gitrOwnerName,responseDTO.gitrOwner!!,
+            this(responseDTO.id, responseDTO.gitrName,responseDTO.gitrOwnerName,null,
                 responseDTO.publicity,responseDTO.gitrMembersNames,
                 responseDTO.gitrDescription,responseDTO.gitrCommitGenerated)
 
 
 
     fun toResponseDTO(): GitrEntityResponseDTO {
-        return GitrEntityResponseDTO(this.id,this.gitrName,this.gitrOwnerName,this.gitrOwner,
+        return GitrEntityResponseDTO(this.id,this.gitrName,this.gitrOwnerName,
             this.publicity,this.gitrMembersNames,this.gitrDescription,this.gitrCommitGenerated)
     }
 
@@ -89,8 +89,7 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
 
 
     override fun toString(): String {
-         if (this==null) return  "null"
-         else return "id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
-                "ownerId:${if (gitrOwner!=null) gitrOwner!!.id else "null"}|owner:$gitrOwnerName|members:$gitrMembersNames|"
+        return "id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
+               "ownerId:${if (gitrOwner!=null) gitrOwner.id else "null"}|owner:$gitrOwnerName|members:$gitrMembersNames|"
     }
 }

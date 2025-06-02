@@ -9,12 +9,18 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.gitr.service.GitrRepository
+import ru.thegod.security.UserRepository
+import ru.thegod.security.cookie.CookieTokenProvider
 
 @MicronautTest(transactional = false)
 class GitrPageTest(@Client("/gits") val client: HttpClient) {
 
     @Inject
     lateinit var repository: GitrRepository
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var tokenProvider: CookieTokenProvider
 
     @Test
     fun `save gitr form page exists test`() {
@@ -25,8 +31,12 @@ class GitrPageTest(@Client("/gits") val client: HttpClient) {
 
     @Test
     fun `add members form page exists test`() {
-        val e = repository.save(TestObjectsProvider.getRandomGitr())
-        val request: HttpRequest<Any> = HttpRequest.GET("/form/addMember/${e.id}")
+        val user = userRepository.save(TestObjectsProvider.USER_ME)
+
+        val e = repository.save(TestObjectsProvider.getStaticDefaultGitr())
+        val cookie = tokenProvider.releaseCookie(user)
+
+        val request: HttpRequest<Any> = HttpRequest.GET<Any?>("/form/addMember/${e.id}").cookie(cookie)
         val body = client.toBlocking().retrieve(request)
         assertNotNull(body)
     }

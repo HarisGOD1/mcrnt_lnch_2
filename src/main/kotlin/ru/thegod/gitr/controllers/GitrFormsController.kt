@@ -29,11 +29,12 @@ class GitrFormsController() {
             return HttpResponse.unauthorized()
 
         val gitr = service.getGitrById(id)?:return HttpResponse.badRequest()
-        if(gitr.gitrOwner!=user)
+        println(gitr)
+        if(gitr.gitrOwnerName!=user.username)
             return HttpResponse.badRequest()
 
 
-        return HttpResponse.ok(mapOf("repos" to service.getGitrById(id)))
+        return HttpResponse.ok(mapOf("repos" to gitr))
     }
 
     @View("gitr/saveGitR.html")

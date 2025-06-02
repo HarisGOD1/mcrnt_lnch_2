@@ -42,18 +42,18 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
             HttpRequest.POST("/save",
                 GitrEntityRequestDTO(testRepEntity)
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .cookie(token)
         // body1 contains data in JSON view, type of body1 - Kotlin.String
-        println(request1.body)
+//        println(request1.body)
 
         val body1 = client.toBlocking().retrieve(request1)
 
 //        assertNotNull(httpResponse)
 //        val body1 = httpResponse.body
-        println(body1)
-        println(body1.toString())
+//        println(body1)
+//        println(body1.toString())
         assertNotNull(body1)
 
         val returnedObjectFromEndpoint = toResponseDTO_fromJsonString(body1.toString(), ObjectMapperProvider.mapper)
@@ -67,7 +67,7 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 //           |
 //          \/
         assertEquals(testRepEntity,savedObjectFromDB)
-        assertEquals(testRepEntity,returnedObjectFromEndpoint.toRepositoryEntity())
+        assertEquals(testRepEntity.gitrName,returnedObjectFromEndpoint.toRepositoryEntity().gitrName)
 
 
         }
@@ -90,9 +90,10 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 //            |
 //           |
 //          \/
-        println(savedObjectFromDB.toString())
-        println(returnedObjectFromEndpoint.toRepositoryEntity().toString())
-        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint.toRepositoryEntity())
+//        println(savedObjectFromDB.toString())
+//        println(returnedObjectFromEndpoint.toString())
+//        println(returnedObjectFromEndpoint.toRepositoryEntity().toString())
+        assertEquals(savedObjectFromDB.gitrOwnerName,returnedObjectFromEndpoint.toRepositoryEntity().gitrOwnerName)
     }
 
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {

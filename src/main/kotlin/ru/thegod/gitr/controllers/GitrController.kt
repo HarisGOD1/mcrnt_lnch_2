@@ -18,8 +18,6 @@ import java.util.*
 class GitrController() {
     @Inject
     private lateinit var service: GitrService
-    @Inject
-    private lateinit var cookieValidator: CookieValidator
 
 
     @Get("/getAll")
@@ -37,15 +35,14 @@ class GitrController() {
 
 
     @Post(uri = "/save",
-        consumes = arrayOf(MediaType.APPLICATION_JSON),
+        consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
     fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO,request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
 
 
 
-        return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,
-            cookieValidator.returnUserIfAuthTokenValid(request.cookies["AUTH-TOKEN"])))
+        return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,request.cookies["AUTH-TOKEN"]))
     }
 
 

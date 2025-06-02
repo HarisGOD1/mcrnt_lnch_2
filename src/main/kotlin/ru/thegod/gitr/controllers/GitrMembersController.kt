@@ -1,5 +1,6 @@
 package ru.thegod.gitr.controllers
 
+import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
@@ -20,7 +21,7 @@ class GitrMembersController() {
     @Post(uri = "/addMember",
         consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
-    fun addMemberInRepository(@Body id_list: GitrAddMembersListRequestDTO, request:HttpResponse<*>):
+    fun addMemberInRepository(@Body id_list: GitrAddMembersListRequestDTO, request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
         val token = request.cookies["AUTH-TOKEN"]
         return HttpResponse.created(service.addMemberInGitr(id_list,token))

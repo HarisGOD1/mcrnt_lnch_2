@@ -33,12 +33,12 @@ class GitrService(private val gitrRepository: GitrRepository,
         }
     }
 
-    fun saveGitr(gitrEntityRequestDTO: GitrEntityRequestDTO,userRequester:User?): GitrEntityResponseDTO {
-//        val userRequester = userRepository.findByUsername(principal.name)
+    fun saveGitr(gitrEntityRequestDTO: GitrEntityRequestDTO,token: Cookie): GitrEntityResponseDTO {
+        val userRequester = cookieValidator.returnUserIfAuthTokenValid(token)
         if (userRequester==null) throw Exception("Username not exist/ not found")
         return gitrRepository.save(
             GitrEntity(gitrEntityRequestDTO.gitrName,
-                userRequester.username!!,
+                userRequester.username,
                 userRequester,
                 gitrEntityRequestDTO.publicity,
                 gitrEntityRequestDTO.gitrDescription)
@@ -48,7 +48,9 @@ class GitrService(private val gitrRepository: GitrRepository,
     fun addMemberInGitr(args: GitrAddMembersListRequestDTO,token: Cookie): GitrEntityResponseDTO?{
         val user = cookieValidator.returnUserIfAuthTokenValid(token)?:return null
         var entity = gitrRepository.findById(args.repositoryId).get()
-        if (user!=entity.gitrOwner) return null
+//        println(user)
+//        println(entity)
+        if (user.username!=entity.gitrOwnerName) return null
 
 
         for (e in args.gitrMembersNames){

@@ -15,6 +15,8 @@ import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
 import ru.thegod.gitr.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
+import ru.thegod.security.UserRepository
+import ru.thegod.security.cookie.CookieTokenProvider
 import java.util.*
 
 @MicronautTest(transactional = false)
@@ -22,10 +24,17 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
 
     @Inject
     lateinit var repository: GitrRepository
+    @Inject
+    lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var tokenProvider: CookieTokenProvider
+
 
     @Test
     fun `add one member works with DB test`() {
         // TEST DATA
+        val user = userRepository.findByUsername(TestObjectsProvider.USER_ME.username)?:userRepository.save(TestObjectsProvider.USER_ME)
+        val cookie = tokenProvider.releaseCookie(user)
         var testRepEntity = TestObjectsProvider.getStaticDefaultGitr()
         val savedRepId = repository.save(testRepEntity).id!!
 
@@ -35,6 +44,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
             HttpRequest.POST("/addMember", GitrAddMembersListRequestDTO(savedRepId,listOf("Pod_Jop")))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
                 .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookie)
         // body1 contains data in JSON view, type of body1 - Kotlin.String
         val body1 = client.toBlocking().retrieve(request1)
         assertNotNull(body1)
@@ -57,6 +67,8 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
     @Test
     fun `add several members with some yet existing works with DB test`() {
         // TEST DATA
+        val user = userRepository.findByUsername(TestObjectsProvider.USER_ME.username)?:userRepository.save(TestObjectsProvider.USER_ME)
+        val cookie = tokenProvider.releaseCookie(user)
         var testRepEntity = TestObjectsProvider.getStaticDefaultGitr()
         val savedRepId = repository.save(testRepEntity).id!!
 
@@ -66,6 +78,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
             HttpRequest.POST("/addMember", GitrAddMembersListRequestDTO(savedRepId, listOf("Pod_Jop", "Otterio")))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
                 .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookie)
         // body1 contains data in JSON view, type of body1 - Kotlin.String
         val body1 = client.toBlocking().retrieve(request1)
 

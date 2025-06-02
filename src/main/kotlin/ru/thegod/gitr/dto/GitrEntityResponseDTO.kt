@@ -9,11 +9,11 @@ import java.util.*
 
 @Introspected
 @Serdeable
-data class GitrEntityResponseDTO(val id: UUID?, val gitrName: String, val gitrOwnerName: String,val gitrOwner:User?,
+data class GitrEntityResponseDTO(val id: UUID?, val gitrName: String, val gitrOwnerName: String,
                                  val publicity: Boolean, val gitrMembersNames:MutableList<String>,
                                  val gitrDescription:String?, val gitrCommitGenerated: String?)
 {
-    constructor(): this(null,"","",null,false, mutableListOf(),
+    constructor(): this(null,"","",false, mutableListOf(),
         null,null)
     fun toRepositoryEntity(): GitrEntity {
         return GitrEntity(this)
