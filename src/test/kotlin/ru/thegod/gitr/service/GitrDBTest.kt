@@ -5,6 +5,7 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
+import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
 

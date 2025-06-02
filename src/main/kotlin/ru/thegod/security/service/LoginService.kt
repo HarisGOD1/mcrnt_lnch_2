@@ -5,9 +5,9 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Singleton
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
-import ru.thegod.security.cookie.CookieValidator
-import ru.thegod.security.cookie.ExpiredTokenStorage
+import ru.thegod.security.cookies.CookieTokenProvider
+import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.cookies.ExpiredTokenStorage
 import java.net.URI
 import java.time.Clock
 
@@ -20,10 +20,6 @@ class LoginService(private val repository: UserRepository,
 
     fun login(username:String, password:String): HttpResponse<Any> {
         val user = repository.findByUsername(username) ?: return HttpResponse.unauthorized()
-//        println("user in login service "+user.toString())
-//        println(passwordEncryptService.passwordToHash(password))
-//        println(password)
-//        println(user.passwordHash)
         if(PasswordEncryptService.passwordToHash(password)==user.passwordHash)
             return HttpResponse.redirect<Any?>(URI("/profile"))
                                 .cookie(cookieTokenProvider.releaseCookie(user,"user"))
@@ -31,21 +27,6 @@ class LoginService(private val repository: UserRepository,
     }
 
 
-    fun profilePage(request: HttpRequest<*>): HttpResponse<String> {
-        val token = request.cookies["AUTH-TOKEN"]
-
-        if (token != null) {
-            val user = cookieValidator.returnUserIfAuthTokenValid(token)
-            if (user!=null) {
-                return HttpResponse.ok("Token is valid, ${user.username}\n${user}")
-            }
-            return HttpResponse.unauthorized()
-        }
-        else{
-            return HttpResponse.unauthorized()
-        }
-
-    }
 //    from RFC 6265
 //    Finally, to remove a cookie, the server returns a Set-Cookie header
 //    with an expiration date in the past.  The server will be successful

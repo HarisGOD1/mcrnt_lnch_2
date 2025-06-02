@@ -1,25 +1,22 @@
 package ru.thegod.gitr.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
-import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import ru.thegod.gitr.service.GitrRepository
-import ru.thegod.gitr.dto.GitrEntityRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.core.GitrRepository
+import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
-import java.net.http.HttpResponse
+import ru.thegod.security.cookies.CookieTokenProvider
 
 @MicronautTest(transactional = false)
 class GitrControllerTest(@Client("/gits") val client: HttpClient,

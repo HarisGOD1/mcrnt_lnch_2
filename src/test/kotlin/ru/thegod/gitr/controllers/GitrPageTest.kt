@@ -8,9 +8,9 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.gitr.service.GitrRepository
+import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
+import ru.thegod.security.cookies.CookieTokenProvider
 
 @MicronautTest(transactional = false)
 class GitrPageTest(@Client("/gits") val client: HttpClient) {

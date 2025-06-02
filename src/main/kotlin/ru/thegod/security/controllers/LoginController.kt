@@ -1,4 +1,4 @@
-package ru.thegod.security.controller
+package ru.thegod.security.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -8,8 +8,8 @@ import io.micronaut.http.annotation.*
 //import io.micronaut.security.rules.SecurityRule
 import io.micronaut.views.View
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
-import ru.thegod.security.cookie.CookieValidator
+import ru.thegod.security.cookies.CookieTokenProvider
+import ru.thegod.security.cookies.CookieValidator
 import ru.thegod.security.service.LoginService
 
 @Controller
@@ -28,12 +28,6 @@ class LoginController(private val repository: UserRepository,
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     fun login(username:String, password:String):HttpResponse<Any>{
         return loginService.login(username,password)
-    }
-    @Get("/profile")
-    @Produces(MediaType.TEXT_PLAIN)
-    fun profilePage(request: HttpRequest<*>): HttpResponse<String>{
-        return loginService.profilePage(request)
-
     }
     @Get("/logout")
     @Produces(MediaType.TEXT_PLAIN)

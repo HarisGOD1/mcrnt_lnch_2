@@ -1,14 +1,12 @@
 package ru.thegod.gitr
 
-import io.micronaut.core.annotation.Nullable
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
 import io.micronaut.data.annotation.Relation
 import io.micronaut.data.model.DataType
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
-import ru.thegod.gitr.dto.GitrEntityRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.security.User
 import java.util.*
 

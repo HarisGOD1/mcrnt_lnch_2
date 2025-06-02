@@ -8,17 +8,13 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 @MicronautTest
 class UserControllerTest {
 
-
-
     fun `test register post endpoint`(){
         val username = "thegod"
         val userpassword ="ppp"
 
-//        val request = HttpRequest.POST("/register",
-//                                        (username,userpassword)
-//        )
-
-
 
     }
+
+
+
 }

@@ -10,13 +10,13 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import ru.thegod.gitr.service.GitrRepository
-import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.core.GitrRepository
+import ru.thegod.gitr.members.dto.GitrAddMembersListRequestDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
+import ru.thegod.security.cookies.CookieTokenProvider
 import java.util.*
 
 @MicronautTest(transactional = false)

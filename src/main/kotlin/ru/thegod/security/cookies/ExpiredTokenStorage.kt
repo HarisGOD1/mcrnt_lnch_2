@@ -1,4 +1,4 @@
-package ru.thegod.security.cookie
+package ru.thegod.security.cookies
 
 import io.lettuce.core.api.StatefulRedisConnection
 import jakarta.inject.Singleton

@@ -1,18 +1,12 @@
 package ru.thegod.security.service
 
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.MediaType
-import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import ru.thegod.gitr.dto.GitrEntityRequestDTO
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieValidator
-import java.net.URI
+import ru.thegod.security.cookies.CookieValidator
 
 @MicronautTest
 class LoginServiceTest {

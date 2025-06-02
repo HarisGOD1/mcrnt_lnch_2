@@ -1,12 +1,12 @@
-package ru.thegod.gitr.service
+package ru.thegod.gitr.members.services
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Singleton
-import ru.thegod.gitr.GitrEntity
-import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
-import ru.thegod.security.cookie.CookieValidator
+import ru.thegod.gitr.members.dto.GitrAddMembersListRequestDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.core.GitrRepository
+import ru.thegod.security.cookies.CookieValidator
 import java.util.*
 
 @Singleton

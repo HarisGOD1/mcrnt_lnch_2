@@ -1,4 +1,4 @@
-package ru.thegod.gitr.controllers
+package ru.thegod.gitr.core.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -7,11 +7,9 @@ import io.micronaut.http.annotation.*
 //import io.micronaut.security.annotation.Secured
 //import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
-import ru.thegod.gitr.dto.GitrEntityRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
-import ru.thegod.gitr.service.GitrService
-import ru.thegod.security.cookie.CookieValidator
-import java.security.Principal
+import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.core.services.GitrService
 import java.util.*
 
 @Controller("/gits")
@@ -39,7 +37,7 @@ class GitrController() {
     @Post(uri = "/save",
         consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
-    fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO,request: HttpRequest<*>):
+    fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO, request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
         return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,request.cookies["AUTH-TOKEN"]))
     }

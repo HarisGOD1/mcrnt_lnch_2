@@ -1,4 +1,4 @@
-package ru.thegod.gitr.service
+package ru.thegod.gitr.core
 
 import io.micronaut.data.annotation.Join
 import io.micronaut.data.jdbc.annotation.JdbcRepository

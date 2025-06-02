@@ -1,4 +1,4 @@
-package ru.thegod.security.controller
+package ru.thegod.security.controllers
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType

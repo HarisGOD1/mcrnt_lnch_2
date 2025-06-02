@@ -1,4 +1,4 @@
-package ru.thegod.gitr.dto
+package ru.thegod.gitr.core.dto
 
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.serde.annotation.Serdeable

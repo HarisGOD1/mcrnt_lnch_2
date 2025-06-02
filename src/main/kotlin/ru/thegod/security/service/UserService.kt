@@ -4,7 +4,7 @@ import io.micronaut.http.HttpResponse
 import jakarta.inject.Singleton
 import ru.thegod.security.User
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
+import ru.thegod.security.cookies.CookieTokenProvider
 import ru.thegod.security.service.PasswordEncryptService.md5
 import java.net.URI
 

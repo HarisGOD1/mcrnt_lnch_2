@@ -1,4 +1,4 @@
-package ru.thegod.gitr.controllers
+package ru.thegod.gitr.core.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -7,10 +7,9 @@ import io.micronaut.http.annotation.*
 //import io.micronaut.security.annotation.Secured
 //import io.micronaut.security.rules.SecurityRule
 import io.micronaut.views.View
-import jakarta.inject.Inject
-import ru.thegod.gitr.service.GitrMembersService
-import ru.thegod.gitr.service.GitrService
-import ru.thegod.security.cookie.CookieValidator
+import ru.thegod.gitr.members.services.GitrMembersService
+import ru.thegod.gitr.core.services.GitrService
+import ru.thegod.security.cookies.CookieValidator
 import java.util.*
 
 @Controller("/gits")

@@ -1,4 +1,4 @@
-package ru.thegod.security.cookie
+package ru.thegod.security.cookies
 
 import io.micronaut.context.annotation.Requires
 import io.micronaut.context.event.ApplicationEventListener

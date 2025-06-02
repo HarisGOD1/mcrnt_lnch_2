@@ -1,4 +1,4 @@
-package ru.thegod.security.cookie
+package ru.thegod.security.cookies
 
 import java.util.*
 import com.fasterxml.jackson.databind.ObjectMapper

@@ -1,4 +1,4 @@
-package ru.thegod.gitr.controllers
+package ru.thegod.gitr.members.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -7,10 +7,9 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import jakarta.inject.Inject
-import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
-import ru.thegod.gitr.dto.GitrEntityResponseDTO
-import ru.thegod.gitr.service.GitrMembersService
-import ru.thegod.gitr.service.GitrService
+import ru.thegod.gitr.members.dto.GitrAddMembersListRequestDTO
+import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.members.services.GitrMembersService
 
 
 @Controller("/gits")

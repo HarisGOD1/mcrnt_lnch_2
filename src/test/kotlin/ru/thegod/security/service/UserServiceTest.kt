@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.UserRepository
-import ru.thegod.security.cookie.CookieTokenProvider
-import ru.thegod.security.cookie.CookieValidator
+import ru.thegod.security.cookies.CookieTokenProvider
+import ru.thegod.security.cookies.CookieValidator
 
 @MicronautTest
 class UserServiceTest {
