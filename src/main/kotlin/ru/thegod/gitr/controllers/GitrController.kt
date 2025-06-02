@@ -19,7 +19,7 @@ class GitrController() {
     @Inject
     private lateinit var service: GitrService
 
-
+    // UNAUTHORIZED
     @Get("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     fun getAllRepositories(): HttpResponse<List<GitrEntityResponseDTO>> {
@@ -27,6 +27,7 @@ class GitrController() {
     }
 
 
+    // UNAUTHORIZED
     @Get("/get/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     fun getById(id: UUID): HttpResponse<GitrEntityResponseDTO> {
@@ -34,14 +35,12 @@ class GitrController() {
     }
 
 
+    // AUTHORIZED
     @Post(uri = "/save",
         consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
     fun saveRepository(@Body gitrEntityRequestDTO: GitrEntityRequestDTO,request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
-
-
-
         return HttpResponse.created(service.saveGitr(gitrEntityRequestDTO,request.cookies["AUTH-TOKEN"]))
     }
 

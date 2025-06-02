@@ -9,21 +9,22 @@ import io.micronaut.http.annotation.Post
 import jakarta.inject.Inject
 import ru.thegod.gitr.dto.GitrAddMembersListRequestDTO
 import ru.thegod.gitr.dto.GitrEntityResponseDTO
+import ru.thegod.gitr.service.GitrMembersService
 import ru.thegod.gitr.service.GitrService
 
 
 @Controller("/gits")
 class GitrMembersController() {
     @Inject
-    private lateinit var service: GitrService
+    private lateinit var mebmerService: GitrMembersService
 
-
+    // AUTHORIZED
     @Post(uri = "/addMember",
         consumes = arrayOf(MediaType.APPLICATION_FORM_URLENCODED),
         produces = arrayOf(MediaType.APPLICATION_JSON))
     fun addMemberInRepository(@Body id_list: GitrAddMembersListRequestDTO, request: HttpRequest<*>):
             HttpResponse<GitrEntityResponseDTO> {
         val token = request.cookies["AUTH-TOKEN"]
-        return HttpResponse.created(service.addMemberInGitr(id_list,token))
+        return HttpResponse.created(mebmerService.addMemberInGitr(id_list,token))
     }
 }

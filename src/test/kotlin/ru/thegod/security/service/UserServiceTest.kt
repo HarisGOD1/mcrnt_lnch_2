@@ -40,7 +40,7 @@ class UserServiceTest {
     @Test
     fun `existed user change password and token invalidates test`(){
         val userPassword = "ppp"
-        val user = TestObjectsProvider.getRandomUser(userPassword)
+        val user = TestObjectsProvider.USER_ME
         userRepository.save(user)
         val newUserPassword = "pppp"
         val token = cookieTokenProvider.releaseCookie(user,"user")

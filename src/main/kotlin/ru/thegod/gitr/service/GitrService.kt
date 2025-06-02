@@ -16,7 +16,6 @@ import kotlin.NoSuchElementException
 
 @Singleton
 class GitrService(private val gitrRepository: GitrRepository,
-                    private val userRepository: UserRepository,
                     private val cookieValidator: CookieValidator) {
 
     fun getAllGitrEntities_toDTO():List<GitrEntityResponseDTO>{
@@ -45,19 +44,5 @@ class GitrService(private val gitrRepository: GitrRepository,
         ).toResponseDTO()
     }
 
-    fun addMemberInGitr(args: GitrAddMembersListRequestDTO,token: Cookie): GitrEntityResponseDTO?{
-        val user = cookieValidator.returnUserIfAuthTokenValid(token)?:return null
-        var entity = gitrRepository.findById(args.repositoryId).get()
-//        println(user)
-//        println(entity)
-        if (user.username!=entity.gitrOwnerName) return null
-
-
-        for (e in args.gitrMembersNames){
-            if(!entity.gitrMembersNames.contains(e)) entity.gitrMembersNames.add(e)
-        }
-        gitrRepository.update(entity)
-        return gitrRepository.findById(args.repositoryId).get().toResponseDTO()
-    }
 
 }
