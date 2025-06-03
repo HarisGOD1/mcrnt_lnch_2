@@ -7,7 +7,7 @@ import io.micronaut.data.model.DataType
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
-import ru.thegod.security.User
+import ru.thegod.security.user.User
 import java.util.*
 
 

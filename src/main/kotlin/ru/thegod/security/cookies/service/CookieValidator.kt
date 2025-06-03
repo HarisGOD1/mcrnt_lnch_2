@@ -1,13 +1,15 @@
-package ru.thegod.security.cookies
+package ru.thegod.security.cookies.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import ru.thegod.security.User
-import ru.thegod.security.UserRepository
+import ru.thegod.security.user.User
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.CryptImpl
+import ru.thegod.security.cookies.storage.ExpiredTokenStorage
 import java.time.Clock
-import java.util.*
+import java.util.Base64
 
 /*
 * RFC-cookie: RFC 6265    -->      https://datatracker.ietf.org/doc/html/rfc6265
@@ -41,7 +43,7 @@ class CookieValidator (private val userRepository: UserRepository,
         ObjectMapper()
     }
     @Inject
-    private lateinit var cryptImpl:CryptImpl
+    private lateinit var cryptImpl: CryptImpl
     // examples https://datatracker.ietf.org/doc/html/rfc6265#section-3.1
     //Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
 
@@ -75,7 +77,7 @@ class CookieValidator (private val userRepository: UserRepository,
     }
 
 
-    private fun extractPayload(token:Cookie): Triple<String, String, String> {
+    private fun extractPayload(token: Cookie): Triple<String, String, String> {
         val blocks = token.value.split(".")
 
         val headerJSON = String(Base64.getDecoder().decode(blocks.get(0)))

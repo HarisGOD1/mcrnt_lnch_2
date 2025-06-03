@@ -15,8 +15,8 @@ import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.UserRepository
-import ru.thegod.security.cookies.CookieTokenProvider
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.service.CookieTokenProvider
 
 @MicronautTest(transactional = false)
 class GitrControllerTest(@Client("/gits") val client: HttpClient,

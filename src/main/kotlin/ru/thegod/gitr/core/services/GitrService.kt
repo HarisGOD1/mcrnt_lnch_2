@@ -6,7 +6,7 @@ import ru.thegod.gitr.GitrEntity
 import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.core.GitrRepository
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.cookies.service.CookieValidator
 import java.util.*
 import kotlin.NoSuchElementException
 

@@ -5,8 +5,9 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.UserRepository
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.service.CookieValidator
+import ru.thegod.security.login.service.LoginService
 
 @MicronautTest
 class LoginServiceTest {
@@ -24,9 +25,8 @@ class LoginServiceTest {
         val userPassword = "ppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
-        val httpResp = loginService.login(user.username,userPassword) // TO-DO: make it work with register endpoint
-        val token = httpResp.cookies["AUTH-TOKEN"]
-        assertNotNull(token.value)
+        val token = loginService.loginReturnToken(user.username,userPassword) // TO-DO: make it work with register endpoint
+        assertNotNull(token!!.value)
         val userFromToken = cookieValidator.returnUserIfAuthTokenValid(token)
         assertNotNull(userFromToken)
         assertEquals(user.username,userFromToken!!.username)
@@ -37,9 +37,9 @@ class LoginServiceTest {
         val userPassword = "ppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
-        val httpResp = loginService.login(user.username,userPassword) // TO-DO: make it work with register endpoint
-        val token = httpResp.cookies["AUTH-TOKEN"]
-        assertNotNull(token.value)
+        val token = loginService.loginReturnToken(user.username,userPassword)// TO-DO: make it work with register endpoint
+        assertNotNull(token)
+        assertNotNull(token!!.value)
         assertNotNull(cookieValidator.returnUserIfAuthTokenValid(token))
 
         loginService.performLogout(token)
@@ -53,23 +53,26 @@ class LoginServiceTest {
         val userPassword = "ppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
-        val httpRespFirst = loginService.login(user.username,userPassword)
+        val tokenFirst = loginService.loginReturnToken(user.username,userPassword)
         Thread.sleep(500) // To be sure, that second token isn't equal to first
                                // (Tokens equal, if released at same millisecond time)
-        val httpRespSecond = loginService.login(user.username,userPassword)// TO-DO: make it work with register endpoint
-        val tokenFirst = httpRespFirst.cookies["AUTH-TOKEN"]
-        val tokenSecond = httpRespSecond.cookies["AUTH-TOKEN"]
+        val tokenSecond = loginService.loginReturnToken(user.username,userPassword)// TO-DO: make it work with register endpoint
 
-        assertNotNull(tokenFirst.value)
+        assertNotNull(tokenFirst)
+        assertNotNull(tokenFirst!!.value)
+        assertNotNull(tokenSecond)
+        assertNotNull(tokenSecond!!.value)
+
         assertNotNull(cookieValidator.returnUserIfAuthTokenValid(tokenFirst))
 
         loginService.performLogoutAll(tokenFirst)
         assertNull(cookieValidator.returnUserIfAuthTokenValid(tokenSecond))
 
         Thread.sleep(500)
-        val httpRespThird = loginService.login(user.username,userPassword)// TO-DO: make it work with register endpoint
-        val tokenThird = httpRespThird.cookies["AUTH-TOKEN"]
-        assertNotNull(tokenThird.value)
+        val tokenThird = loginService.loginReturnToken(user.username,userPassword)// TO-DO: make it work with register endpoint
+
+        assertNotNull(tokenThird)
+        assertNotNull(tokenThird!!.value)
         assertNotNull(cookieValidator.returnUserIfAuthTokenValid(tokenThird))
 
 

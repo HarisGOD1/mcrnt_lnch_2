@@ -6,7 +6,7 @@ import jakarta.inject.Singleton
 import ru.thegod.gitr.members.dto.GitrAddMembersListRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.core.GitrRepository
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.cookies.service.CookieValidator
 import java.util.*
 
 @Singleton

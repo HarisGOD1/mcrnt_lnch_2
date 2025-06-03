@@ -1,4 +1,4 @@
-package ru.thegod.security.controllers
+package ru.thegod.security.user.controllers
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
@@ -6,7 +6,7 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
-import ru.thegod.security.service.ProfileService
+import ru.thegod.security.user.services.ProfileService
 
 @Controller
 class ProfileController(private val profileService: ProfileService) {

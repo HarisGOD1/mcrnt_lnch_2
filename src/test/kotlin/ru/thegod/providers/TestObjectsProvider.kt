@@ -2,8 +2,8 @@ package ru.thegod.providers
 
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
-import ru.thegod.security.User
-import ru.thegod.security.service.PasswordEncryptService.md5
+import ru.thegod.security.user.User
+import ru.thegod.security.authentication.services.PasswordEncryptService.md5
 import kotlin.random.Random
 
 @Singleton

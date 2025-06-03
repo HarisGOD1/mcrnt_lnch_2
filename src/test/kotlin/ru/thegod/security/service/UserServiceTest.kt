@@ -5,9 +5,10 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.UserRepository
-import ru.thegod.security.cookies.CookieTokenProvider
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.service.CookieTokenProvider
+import ru.thegod.security.cookies.service.CookieValidator
+import ru.thegod.security.user.services.UserService
 
 @MicronautTest
 class UserServiceTest {
@@ -19,23 +20,6 @@ class UserServiceTest {
     private lateinit var cookieValidator: CookieValidator
     @Inject
     private lateinit var cookieTokenProvider: CookieTokenProvider
-
-    @Test
-    fun `register new user returns cookie and user saved test`(){
-        val userPassword = "ppp"
-        val user = TestObjectsProvider.getRandomUser(userPassword)
-        val httpResp = userService.registerNewUser(user.username,userPassword)
-
-
-        val token = httpResp.cookies["AUTH-TOKEN"]
-
-        val userFromDB = userRepository.findByUsername(user.username)
-        assertNotNull(userFromDB)
-        assertEquals(user,userFromDB)
-        val userFromToken = cookieValidator.returnUserIfAuthTokenValid(token)
-        assertNotNull(userFromToken)
-        assertEquals(user.username,userFromToken!!.username)
-    }
 
     @Test
     fun `existed user change password and token invalidates test`(){

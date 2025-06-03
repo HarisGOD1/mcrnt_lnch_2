@@ -1,4 +1,4 @@
-package ru.thegod.security.service
+package ru.thegod.security.authentication.services
 
 import java.security.MessageDigest
 

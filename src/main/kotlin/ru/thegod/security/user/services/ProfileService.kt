@@ -1,9 +1,9 @@
-package ru.thegod.security.service
+package ru.thegod.security.user.services
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import jakarta.inject.Singleton
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.cookies.service.CookieValidator
 
 @Singleton
 class ProfileService(private val cookieValidator: CookieValidator) {

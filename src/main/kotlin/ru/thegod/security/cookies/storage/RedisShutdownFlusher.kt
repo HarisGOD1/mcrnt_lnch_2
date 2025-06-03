@@ -1,8 +1,8 @@
-package ru.thegod.security.cookies
+package ru.thegod.security.cookies.storage
 
+import io.lettuce.core.api.StatefulRedisConnection
 import io.micronaut.context.annotation.Requires
 import io.micronaut.context.event.ApplicationEventListener
-import io.lettuce.core.api.StatefulRedisConnection
 import io.micronaut.context.event.ShutdownEvent
 import jakarta.inject.Singleton
 import org.slf4j.LoggerFactory

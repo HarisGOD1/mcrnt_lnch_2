@@ -9,7 +9,7 @@ import io.micronaut.http.annotation.*
 import io.micronaut.views.View
 import ru.thegod.gitr.members.services.GitrMembersService
 import ru.thegod.gitr.core.services.GitrService
-import ru.thegod.security.cookies.CookieValidator
+import ru.thegod.security.cookies.service.CookieValidator
 import java.util.*
 
 @Controller("/gits")

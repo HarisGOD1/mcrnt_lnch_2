@@ -6,7 +6,7 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.UserRepository
+import ru.thegod.security.user.UserRepository
 
 
 @MicronautTest

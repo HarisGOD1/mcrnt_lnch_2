@@ -7,9 +7,9 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.UserRepository
-import ru.thegod.security.cookies.CookieTokenProvider
-import java.net.http.HttpClient
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.service.CookieTokenProvider
+import ru.thegod.security.user.services.ProfileService
 
 
 @MicronautTest(transactional = false)
@@ -31,7 +31,7 @@ class ProfileControllerTest() {
         val user = TestObjectsProvider.USER_ME
         userRepository.save(user)
         val token = tokenProvider.releaseCookie(user)
-        val httpReq: HttpRequest<Any> = HttpRequest
+        val httpReq: HttpRequest<Any?> = HttpRequest
             .GET<Any?>("/profile")
             .cookie(token)
         val res = client.toBlocking().retrieve(httpReq)

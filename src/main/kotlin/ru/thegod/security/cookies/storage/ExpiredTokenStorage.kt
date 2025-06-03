@@ -1,8 +1,8 @@
-package ru.thegod.security.cookies
+package ru.thegod.security.cookies.storage
 
 import io.lettuce.core.api.StatefulRedisConnection
 import jakarta.inject.Singleton
-import java.util.*
+import java.util.Optional
 
 @Singleton
 class ExpiredTokenStorage(private var redisConnection: StatefulRedisConnection<String, String>) {
@@ -18,7 +18,7 @@ class ExpiredTokenStorage(private var redisConnection: StatefulRedisConnection<S
     fun putSingleExpiredToken(token:String):String{
         return redisConnection.sync().setex("token:$token", 30, "expired")
     }
-    fun getSingleExpiredToken(token:String):Optional<String>{
+    fun getSingleExpiredToken(token:String): Optional<String> {
         return Optional.ofNullable(redisConnection.sync()["token:$token"])
     }
 
@@ -27,7 +27,7 @@ class ExpiredTokenStorage(private var redisConnection: StatefulRedisConnection<S
         return redisConnection.sync().setex("expired:$username",30,born.toString())
     }
 
-    fun getAllExpiredTime(username: String):Optional<String>{
+    fun getAllExpiredTime(username: String): Optional<String> {
         return Optional.ofNullable(redisConnection.sync()["expired:$username"])
     }
 

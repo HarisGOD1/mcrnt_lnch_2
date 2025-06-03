@@ -1,23 +1,16 @@
-package ru.thegod.security.cookies
+package ru.thegod.security.cookies.service
 
-import java.util.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.cookie.Cookie
 import io.micronaut.http.cookie.SameSite
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import ru.thegod.security.User
-import ru.thegod.security.UserRepository
+import ru.thegod.security.user.User
+import ru.thegod.security.user.UserRepository
+import ru.thegod.security.cookies.CryptImpl
 import java.time.Clock
 import java.time.Duration
-
-// AES/GCM
-// Set-Cookie: AUTH-TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6...; Path=/; HttpOnly; Secure; SameSite=Strict
-// AUTH-TOKEN=header.payload.signature -> Each part is Base64URL-encoded
-// VCJ9.eyDB9.rN8xY
-// Header: algorithm & token type (e.g., {"alg":"HS256","typ":"JWT"})       /_____  is the
-// Payload: claims {"userId":123,"exp":170000000}                           \-----  JSON
-// Signature: generated using the header, payload, and secret key
+import java.util.Base64
 
 @Singleton
 class CookieTokenProvider(private val userRepository: UserRepository) {
@@ -27,7 +20,7 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
     }
 
     @Inject
-    private lateinit var cryptImpl:CryptImpl
+    private lateinit var cryptImpl: CryptImpl
 
     // generates token-value aka
     fun generateToken(user: User, role: String):String{
@@ -50,7 +43,7 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
         return tokenValue
     }
     //
-    fun releaseCookie(user: User, role:String): Cookie{
+    fun releaseCookie(user: User, role:String): Cookie {
 //        val setCookieString:String = "thegodtoken="+tokenValue+"; Path=/; HttpOnly; Secure; SameSite=Strict"
         val cookie = Cookie.of("AUTH-TOKEN", generateToken(user,role))
             .httpOnly(true)
@@ -62,11 +55,11 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
         return cookie
     }
 
-    fun releaseCookie(user: User):Cookie {
+    fun releaseCookie(user: User): Cookie {
         return releaseCookie(user, "user")
     }
 
-    fun releaseExpiredCookie():Cookie{
+    fun releaseExpiredCookie(): Cookie {
         val cookie = Cookie.of("AUTH-TOKEN", "empty")
             .httpOnly(true)
             .secure(true)

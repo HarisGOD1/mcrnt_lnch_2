@@ -5,7 +5,7 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.cookies.CookieTokenProvider
+import ru.thegod.security.cookies.service.CookieTokenProvider
 import ru.thegod.security.cookies.CryptImpl
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
