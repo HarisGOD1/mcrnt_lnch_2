@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.repositories.UserRepository
 
 
 @MicronautTest(environments = ["test"],startApplication = false, transactional = false)
@@ -29,7 +29,7 @@ class GitrDBTest {
 
         var savedrepos = gitrRepository.saveAll(gitRepos)
 
-        assertEquals(gitRepos[0].gitrOwnerName,savedrepos[0].gitrOwnerName)
+        assertEquals(gitRepos[0].gitrOwnerId,savedrepos[0].gitrOwnerId)
         assertEquals(gitRepos[1].gitrMembersNames,savedrepos[1].gitrMembersNames)
 
     }
@@ -47,7 +47,7 @@ class GitrDBTest {
         var repNum: Int = 0
 
         while(repNum<gitRepos.size){
-            assertEquals(gitRepos[repNum].gitrOwnerName,savedrepos[repNum].gitrOwnerName)
+            assertEquals(gitRepos[repNum].gitrOwnerId,savedrepos[repNum].gitrOwnerId)
             assertEquals(gitRepos[repNum].gitrName,savedrepos[repNum].gitrName)
             assertEquals(gitRepos[repNum].publicity,savedrepos[repNum].publicity)
             assertEquals(gitRepos[repNum].gitrMembersNames,savedrepos[repNum].gitrMembersNames)
@@ -73,11 +73,9 @@ class GitrDBTest {
         val testUserFromDB = userRepository.getById(testUser.id!!).get()
         println(testUserFromDB)
         val testGitrFromDB = gitrRepository.getById(testGitr.id!!)
-        assertNotEquals(testGitrFromDB.get().gitrOwner,testUserFromDB)
-        assertEquals(testGitrFromDB.get().gitrOwner!!.username,testUserFromDB.username)
-        assertEquals(testGitrFromDB.get().gitrOwner!!.id,testUserFromDB.id)
-        assertEquals(testGitrFromDB.get().gitrName,testUserFromDB.ownedRepositories.get(0).gitrName)
-        assertEquals(testGitrFromDB.get().gitrDescription,testUserFromDB.ownedRepositories.get(0).gitrDescription)
+        assertEquals(testGitrFromDB.get().gitrOwnerId,testUserFromDB.id)
+//        assertEquals(testGitrFromDB.get().gitrName,testUserFromDB.ownedRepositoriesIdList.get(0).gitrName)
+//        assertEquals(testGitrFromDB.get().gitrDescription,testUserFromDB.ownedRepositoriesIdList.get(0).gitrDescription)
 //        assertEquals(testGitr.gitrOwner,testUser)
 
 

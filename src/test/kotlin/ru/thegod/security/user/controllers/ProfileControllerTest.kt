@@ -1,16 +1,16 @@
-package ru.thegod.security.service
+package ru.thegod.security.user.controllers
 
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
 import ru.thegod.security.cookies.service.CookieTokenProvider
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.user.services.ProfileService
-
 
 @MicronautTest(transactional = false)
 class ProfileControllerTest() {
@@ -23,7 +23,7 @@ class ProfileControllerTest() {
     lateinit var profileService: ProfileService
     @Inject
     @Client("/")
-    lateinit var client: io.micronaut.http.client.HttpClient
+    lateinit var client: HttpClient
 
 
     @Test
@@ -36,7 +36,7 @@ class ProfileControllerTest() {
             .cookie(token)
         val res = client.toBlocking().retrieve(httpReq)
         println(res)
-        assertNotNull(res)
+        Assertions.assertNotNull(res)
     }
 
 }

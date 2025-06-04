@@ -5,8 +5,8 @@ import io.micronaut.http.cookie.Cookie
 import io.micronaut.http.cookie.SameSite
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import ru.thegod.security.user.User
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.models.User
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.CryptImpl
 import java.time.Clock
 import java.time.Duration
@@ -29,8 +29,8 @@ class CookieTokenProvider(private val userRepository: UserRepository) {
         val headerJSON = objectMapper.writeValueAsString(header)
 
         val payloadJSON=objectMapper.writeValueAsString(
-            mapOf("username" to user.username,
-                "role" to role,
+            mapOf(
+                "username" to user.username,
                 "born" to Clock.systemUTC().millis(),
                 "security_hash" to user.securityHash())
         )

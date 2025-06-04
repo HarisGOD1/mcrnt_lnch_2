@@ -1,15 +1,16 @@
-package ru.thegod.security.service
+package ru.thegod.security.cookie
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.authentication.services.PasswordEncryptService.md5
+import ru.thegod.security.cookies.CryptImpl
 import ru.thegod.security.cookies.service.CookieTokenProvider
 import ru.thegod.security.cookies.service.CookieValidator
-import ru.thegod.security.cookies.CryptImpl
-import ru.thegod.security.authentication.services.PasswordEncryptService.md5
+import ru.thegod.security.user.repositories.UserRepository
+
 // MAKING TRANSACTION FALSE DOESNT CLEAR THE REPOSITORIES
 @MicronautTest
 class CookieValidatorTest {
@@ -27,12 +28,12 @@ class CookieValidatorTest {
     @Test
     fun `test real cookie is validated`(){
         val user = userRepository.save(TestObjectsProvider.USER_ME)
-        assertNotNull(user)
+        Assertions.assertNotNull(user)
         val cookie = cookieTokenProvider.releaseCookie(user,"user")
 //        println(userRepository.findAll())
         val userFromToken = cookieValidator.returnUserIfAuthTokenValid(cookie)
-        assertNotNull(userFromToken)
-        assertEquals(user.username,userFromToken!!.username)
+        Assertions.assertNotNull(userFromToken)
+        Assertions.assertEquals(user.username, userFromToken!!.username)
 
     }
 
@@ -40,14 +41,14 @@ class CookieValidatorTest {
     fun `test cookie securityHash invalidated`(){
 //        println(userRepository.findAll())
         var user = userRepository.save(TestObjectsProvider.USER_ME)
-        assertNotNull(user)
+        Assertions.assertNotNull(user)
         val cookie = cookieTokenProvider.releaseCookie(user,"user")
         user.passwordHash="anotherpassword".md5()
         userRepository.update(user)
 
 
         val userFromToken = cookieValidator.returnUserIfAuthTokenValid(cookie)
-        assertNull(userFromToken)
+        Assertions.assertNull(userFromToken)
 
     }
 

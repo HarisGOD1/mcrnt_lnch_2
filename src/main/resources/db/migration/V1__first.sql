@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS entity_msg (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    messageContent varchar(400)
-);

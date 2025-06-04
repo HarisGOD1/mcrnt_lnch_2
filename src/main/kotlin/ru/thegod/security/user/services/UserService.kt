@@ -2,8 +2,8 @@ package ru.thegod.security.user.services
 
 import jakarta.inject.Singleton
 import ru.thegod.security.authentication.services.PasswordEncryptService.md5
-import ru.thegod.security.user.User
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.models.User
+import ru.thegod.security.user.repositories.UserRepository
 
 @Singleton
 class UserService(private val repository: UserRepository)

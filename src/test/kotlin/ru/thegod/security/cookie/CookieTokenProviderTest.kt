@@ -1,12 +1,12 @@
-package ru.thegod.security.service
+package ru.thegod.security.cookie
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.cookies.service.CookieTokenProvider
 import ru.thegod.security.cookies.CryptImpl
+import ru.thegod.security.cookies.service.CookieTokenProvider
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -28,9 +28,9 @@ class CookieTokenProviderTest {
     fun `test provider`(){
         val user = TestObjectsProvider.USER_ME
         val cookie = cookieTokenProvider.releaseCookie(user,"user")
-        assertEquals(true,cookie.isHttpOnly)
-        assertEquals(true,cookie.isSecure)
-        assertEquals("AUTH-TOKEN",cookie.name)
+        Assertions.assertEquals(true, cookie.isHttpOnly)
+        Assertions.assertEquals(true, cookie.isSecure)
+        Assertions.assertEquals("AUTH-TOKEN", cookie.name)
     }
 
     @Test
@@ -49,6 +49,6 @@ class CookieTokenProviderTest {
         val algorithm = "AES/GCM/NoPadding"
         val cipherText: String = cryptImpl.encrypt(algorithm, input, key, gcmParameterSpec)
         val plainText: String = cryptImpl.decrypt(algorithm, cipherText, key, gcmParameterSpec)
-        assertEquals(input, plainText)
+        Assertions.assertEquals(input, plainText)
     }
 }

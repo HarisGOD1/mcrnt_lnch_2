@@ -1,13 +1,11 @@
-package ru.thegod.security.service
-
+package ru.thegod.security.user.services
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
-
+import ru.thegod.security.user.repositories.UserRepository
 
 @MicronautTest
 class UserDBTest {
@@ -17,7 +15,8 @@ class UserDBTest {
 
     @Test
     fun `save list dumb test`() {
-        val listuser = mutableListOf(TestObjectsProvider.getRandomUser(),
+        val listuser = mutableListOf(
+            TestObjectsProvider.getRandomUser(),
                             TestObjectsProvider.getRandomUser(),
                             TestObjectsProvider.getRandomUser(),
         )
@@ -26,7 +25,7 @@ class UserDBTest {
 
         println(savedListFromDB)
         println(listuser)
-        assertEquals(listuser,savedListFromDB)
+        Assertions.assertEquals(listuser, savedListFromDB)
 
     }
 }

@@ -2,7 +2,7 @@ package ru.thegod.security.login.service
 
 import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Singleton
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.authentication.services.PasswordEncryptService
 import ru.thegod.security.cookies.storage.ExpiredTokenStorage
 import ru.thegod.security.cookies.service.CookieTokenProvider

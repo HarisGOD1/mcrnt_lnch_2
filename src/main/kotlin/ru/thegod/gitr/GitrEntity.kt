@@ -7,50 +7,43 @@ import io.micronaut.data.model.DataType
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
-import ru.thegod.security.user.User
+import ru.thegod.security.user.models.User
 import java.util.*
 
 
 @Serdeable
 @MappedEntity
 @Table(name="git_repository_list")
-data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
-                      @MappedProperty("gitrepository") val gitrName: String,
-                      @MappedProperty("gitownername") val gitrOwnerName: String,
-
-//                      @Nullable
-//                      @Relation(Relation.Kind.MANY_TO_ONE) //fetch = FetchType.LAZY)
-//                      @JoinColumn(name="gitrowner_id",referencedColumnName="user_table.id")
+data class GitrEntity(@Id
+                      @GeneratedValue
+                      val id: UUID? = null,
+                      @MappedProperty("gitr_name")
+                      val gitrName: String,
                       @MappedProperty("gitr_owner_id")
-                      @Relation(value = Relation.Kind.MANY_TO_ONE)
-                      val gitrOwner: User?,// in db this is field, containing id(uuid) that refere to some User
-
-                      @MappedProperty("publicity") var publicity: Boolean,
-                      @MappedProperty("membersnames", type= DataType.STRING_ARRAY) var gitrMembersNames: MutableList<String>, // TO-DO: make it psql Array
-                      @MappedProperty("gitrepositorydescription") var gitrDescription: String?,
-                               // if this nullable will be null before saving,
-                            // then after get from db this will be empty String
-                      @MappedProperty("lastcommitgenerated") var gitrCommitGenerated: String?
+                      val gitrOwnerId: UUID?,// owner user.class -> uuid.class bc of "@Join is bad"
+                      @MappedProperty("publicity")
+                      var publicity: Boolean,
+                      @MappedProperty("membersnames", type= DataType.STRING_ARRAY)
+                      var gitrMembersNames: MutableList<String>,
+                      @MappedProperty("gitrepositorydescription")
+                      var gitrDescription: String?,
+                      @MappedProperty("lastcommitgenerated")
+                      var gitrCommitGenerated: String?
                                ) {
-    constructor(gitRepositoryName: String, gitOwnerName: String,gitrOwner: User, publicity: Boolean, repositoryDescription: String?) :
-            this(null,gitRepositoryName,gitOwnerName,gitrOwner, publicity,
-                mutableListOf(),repositoryDescription,null)
+    // minimal constructor
+   //
+    constructor(gitRepositoryName: String,
+                gitrOwnerId:UUID,
+                publicity: Boolean,
+                repositoryDescription: String?) :
 
-//    constructor(requestDTO: GitrEntityRequestDTO) :
-//            this(requestDTO.gitrName,requestDTO.gitrOwner.username,requestDTO.gitrOwner,
-//                requestDTO.publicity,requestDTO.gitrDescription)
-
-    constructor(responseDTO: GitrEntityResponseDTO) :
-            this(responseDTO.id, responseDTO.gitrName,responseDTO.gitrOwnerName,null,
-                responseDTO.publicity,responseDTO.gitrMembersNames,
-                responseDTO.gitrDescription,responseDTO.gitrCommitGenerated)
-
-
-
-    fun toResponseDTO(): GitrEntityResponseDTO {
-        return GitrEntityResponseDTO(this.id,this.gitrName,this.gitrOwnerName,
-            this.publicity,this.gitrMembersNames,this.gitrDescription,this.gitrCommitGenerated)
-    }
+            this(null,
+                gitRepositoryName,
+                gitrOwnerId,
+                publicity,
+                mutableListOf(),
+                repositoryDescription,
+                null)
 
 
 
@@ -63,9 +56,7 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
                     &&
                     this.gitrName == other.gitrName
                     &&
-                    this.gitrOwnerName == other.gitrOwnerName
-                    &&
-                    this.gitrOwner==other.gitrOwner
+                    this.id==other.id
                     &&
                     this.publicity == other.publicity
                     &&
@@ -88,6 +79,6 @@ data class GitrEntity(@Id @GeneratedValue val id: UUID? = null,
 
     override fun toString(): String {
         return "id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
-               "ownerId:${if (gitrOwner!=null) gitrOwner.id else "null"}|owner:$gitrOwnerName|members:$gitrMembersNames|"
+               "ownerId:${gitrOwnerId}|"
     }
 }

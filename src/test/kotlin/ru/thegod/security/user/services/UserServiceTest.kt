@@ -1,14 +1,13 @@
-package ru.thegod.security.service
+package ru.thegod.security.user.services
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
 import ru.thegod.security.cookies.service.CookieTokenProvider
 import ru.thegod.security.cookies.service.CookieValidator
-import ru.thegod.security.user.services.UserService
+import ru.thegod.security.user.repositories.UserRepository
 
 @MicronautTest
 class UserServiceTest {
@@ -32,9 +31,9 @@ class UserServiceTest {
         val httpResp = userService.changeUserPassword(user.username,user.passwordHash,newUserPassword)
 
         val userFromDB = userRepository.findByUsername(user.username)
-        assertNotNull(userFromDB)
-        assertNotEquals(user.passwordHash,userFromDB!!.passwordHash)
-        assertNull(cookieValidator.returnUserIfAuthTokenValid(token))
+        Assertions.assertNotNull(userFromDB)
+        Assertions.assertNotEquals(user.passwordHash, userFromDB!!.passwordHash)
+        Assertions.assertNull(cookieValidator.returnUserIfAuthTokenValid(token))
     }
 
 

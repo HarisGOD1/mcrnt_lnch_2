@@ -1,14 +1,13 @@
-package ru.thegod.security.service
+package ru.thegod.security.registration
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
 import ru.thegod.security.cookies.service.CookieValidator
-import ru.thegod.security.registration.RegistrationService
+import ru.thegod.security.registration.services.RegistrationService
+import ru.thegod.security.user.repositories.UserRepository
 
 @MicronautTest
 class RegistrationServiceTest {
@@ -31,12 +30,12 @@ class RegistrationServiceTest {
         val token = httpResp.cookies["AUTH-TOKEN"]
 
         val userFromDB = userRepository.findByUsername(user.username)
-        assertNotNull(userFromDB)
-        assertEquals(user,userFromDB)
+        Assertions.assertNotNull(userFromDB)
+        Assertions.assertEquals(user, userFromDB)
 
         val userFromToken = cookieValidator.returnUserIfAuthTokenValid(token)
-        assertNotNull(userFromToken)
-        assertEquals(user.username,userFromToken!!.username)
+        Assertions.assertNotNull(userFromToken)
+        Assertions.assertEquals(user.username, userFromToken!!.username)
     }
 
 

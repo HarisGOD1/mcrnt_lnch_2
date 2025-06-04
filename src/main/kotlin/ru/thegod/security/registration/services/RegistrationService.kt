@@ -1,11 +1,11 @@
-package ru.thegod.security.registration
+package ru.thegod.security.registration.services
 
 import io.micronaut.http.HttpResponse
 import jakarta.inject.Singleton
 import ru.thegod.security.authentication.services.PasswordEncryptService.md5
+import ru.thegod.security.user.models.User
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.user.services.UserService
-import ru.thegod.security.user.User
-import ru.thegod.security.user.UserRepository
 import java.net.URI
 
 @Singleton

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import ru.thegod.security.user.User
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.models.User
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.CryptImpl
 import ru.thegod.security.cookies.storage.ExpiredTokenStorage
 import java.time.Clock
@@ -49,9 +49,12 @@ class CookieValidator (private val userRepository: UserRepository,
 
     fun returnUserIfAuthTokenValid(token: Cookie): User?{
         val (headerJSON,payloadJSON,signature) = extractPayload(token)
-        val payloadMap = objectMapper.readValue(payloadJSON, Map::class.java) as? Map<String, Any>
+        // if user's token was damaged, then his token's signature
+        // will be inconsistent with his payload
+        // This is checking for consistency
+        if ((headerJSON+"."+payloadJSON)!=signature) return null
 
-        // TO-DO: extract to two methods: validate and verify
+        val payloadMap = objectMapper.readValue(payloadJSON, Map::class.java) as? Map<String, Any>
         if(payloadMap==null) return null
         if(!expiredTokenStorage.getSingleExpiredToken(token.value).isEmpty) return null
 
@@ -59,24 +62,31 @@ class CookieValidator (private val userRepository: UserRepository,
         val username = getUsernameFromPayloadMap(payloadMap)
         val securityHash = getSecurityHashFromPayloadMap(payloadMap)
 
-        val lastAllExpired=expiredTokenStorage.getAllExpiredTime(username)
 
+        // user may perform invalidation of all his released tokens
+        // then we need to check for those tokens, using storage
+        val lastAllExpired=expiredTokenStorage.getAllExpiredTime(username)
         if(!lastAllExpired.isEmpty)
             if(bornTime<lastAllExpired.get().toLong())
                 return null
 
+        // check if token out of default time long
         if(Clock.systemUTC().millis()> (bornTime+3600000))
             return null
 
         val user = userRepository.findByUsername(username) ?: return null
+        // security check needed in case if token user
+        // changed password, then any other tokens will be invalid
         if (securityHash != user.securityHash()) return null
 
-        if ((headerJSON+"."+payloadJSON)==signature)
-            return user
-        else return null
+
+        return user
+
     }
 
 
+
+    // extracting parts of token and decode them into JSON strings
     private fun extractPayload(token: Cookie): Triple<String, String, String> {
         val blocks = token.value.split(".")
 

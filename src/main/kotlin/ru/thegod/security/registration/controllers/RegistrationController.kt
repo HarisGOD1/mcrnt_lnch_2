@@ -1,4 +1,4 @@
-package ru.thegod.security.registration
+package ru.thegod.security.registration.controllers
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Produces
 import io.micronaut.views.View
-import ru.thegod.security.registration.RegistrationService
+import ru.thegod.security.registration.services.RegistrationService
 
 @Controller
 class RegistrationController(private val registrationService: RegistrationService) {

@@ -2,7 +2,7 @@ package ru.thegod.providers
 
 import jakarta.inject.Singleton
 import ru.thegod.gitr.GitrEntity
-import ru.thegod.security.user.User
+import ru.thegod.security.user.models.User
 import ru.thegod.security.authentication.services.PasswordEncryptService.md5
 import kotlin.random.Random
 
@@ -19,7 +19,7 @@ object TestObjectsProvider {
         mutableListOf("Bruno","iliazakharchenia","thegod")
 
     )
-    val USER_ME = User(null,"thegod","ppp".md5(), mutableListOf())
+    val USER_ME = User("thegod","ppp".md5())
 
     fun getRandomUser():User{
         return User(null, MEMBERS_LIST.random().random(),"ppp".md5(), mutableListOf())
@@ -29,22 +29,21 @@ object TestObjectsProvider {
     }
 
     fun getStaticDefaultGitr(): GitrEntity {
-        return GitrEntity(id = null, gitrName = "TestObjectName",
-            gitrOwnerName = "thegod", USER_ME, publicity = true,
+        return GitrEntity(id = null, gitrName = "TestObjectName", USER_ME.id, publicity = true,
             mutableListOf(),
             gitrDescription = "smt in description", gitrCommitGenerated = null)
     }
 
     fun getRandomGitr(): GitrEntity {
         return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
-            gitrOwnerName = "thegod", USER_ME, publicity = true,
+            USER_ME.id, publicity = true,
             MEMBERS_LIST.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
             gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }
 
     fun getRandomGitr(owner: User): GitrEntity {
         return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
-            gitrOwnerName = owner.username, owner, publicity = true,
+            owner.id, publicity = true,
             MEMBERS_LIST.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
             gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }

@@ -1,8 +1,8 @@
-package ru.thegod.security.service
+package ru.thegod.security.cookie
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import ru.thegod.security.cookies.storage.ExpiredTokenStorage
@@ -22,14 +22,14 @@ class RedisStorageTest {
     @Test
     fun `test connection`(){
         storage.putItem("alice","bob")
-        assertEquals("bob",storage.getItem("alice").get())
+        Assertions.assertEquals("bob", storage.getItem("alice").get())
     }
 
     @Test
     fun `test size`(){
-        assertEquals(0,storage.getSize())
+        Assertions.assertEquals(0, storage.getSize())
         storage.putItem("alice","bob")
-        assertEquals(1,storage.getSize())
+        Assertions.assertEquals(1, storage.getSize())
 
     }
 

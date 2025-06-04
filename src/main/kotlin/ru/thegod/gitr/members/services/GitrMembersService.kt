@@ -18,14 +18,13 @@ class GitrMembersService(private val gitrRepository: GitrRepository,
         var entity = gitrRepository.findById(args.repositoryId).get()
 //        println(user)
 //        println(entity)
-        if (user.username!=entity.gitrOwnerName) return null
+        if (user.id!=entity.gitrOwnerId) return null
 
 
         for (e in args.gitrMembersNames){
             if(!entity.gitrMembersNames.contains(e)) entity.gitrMembersNames.add(e)
         }
-        gitrRepository.update(entity)
-        return gitrRepository.findById(args.repositoryId).get().toResponseDTO()
+        return GitrEntityResponseDTO(gitrRepository.update(entity))
     }
 
     fun getMemberListFromGitr(id: UUID,token: Cookie): HttpResponse<Any> {
@@ -34,10 +33,11 @@ class GitrMembersService(private val gitrRepository: GitrRepository,
         if (user==null)
             return HttpResponse.unauthorized()
 
-        val gitr = gitrRepository.findById(id)?:return HttpResponse.badRequest()
-//        println(gitr)
+        val gitr = gitrRepository.findById(id)
+            if(gitr.isEmpty) return HttpResponse.badRequest()
+
         if (gitr.isEmpty) return HttpResponse.badRequest()
-        if(gitr.get().gitrOwnerName!=user.username)
+        if(gitr.get().gitrOwnerId!=user.id)
             return HttpResponse.badRequest()
 
 

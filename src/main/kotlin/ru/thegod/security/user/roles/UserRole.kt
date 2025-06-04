@@ -1,4 +1,4 @@
-package ru.thegod.security.user
+package ru.thegod.security.user.roles
 
 enum class UserRole {
     DEFAULT_USER,

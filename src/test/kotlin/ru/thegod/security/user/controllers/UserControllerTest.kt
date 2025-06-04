@@ -1,9 +1,6 @@
-package ru.thegod.security.controllers
+package ru.thegod.security.user.controllers
 
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.MediaType
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-//import java.net.http.HttpRequest
 
 @MicronautTest
 class UserControllerTest {

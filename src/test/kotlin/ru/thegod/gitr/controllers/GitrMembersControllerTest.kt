@@ -15,7 +15,7 @@ import ru.thegod.gitr.members.dto.GitrAddMembersListRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.service.CookieTokenProvider
 import java.util.*
 
@@ -60,7 +60,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
 //            |
 //           |
 //          \/
-        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint.toRepositoryEntity())
+        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint)
 
     }
 
@@ -97,7 +97,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
 //          |
 //         |
 //        \/
-        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint.toRepositoryEntity())
+        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint)
     }
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {
         return objectMapper.readValue(json, GitrEntityResponseDTO::class.java)

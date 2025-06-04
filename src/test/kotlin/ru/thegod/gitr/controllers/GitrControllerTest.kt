@@ -10,12 +10,14 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import ru.thegod.gitr.GitrEntity
 import ru.thegod.gitr.core.GitrRepository
+import ru.thegod.gitr.core.dto.GitrEntityCreationRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.providers.ObjectMapperProvider
 import ru.thegod.providers.TestObjectsProvider
-import ru.thegod.security.user.UserRepository
+import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.service.CookieTokenProvider
 
 @MicronautTest(transactional = false)
@@ -35,9 +37,12 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 //        PERFORM ACTION
         userRepository.save(userOwner)
         val token = cookieTokenProvider.releaseCookie(userOwner)
-        val request1: HttpRequest<GitrEntityRequestDTO> =
+        val request1: HttpRequest<GitrEntityCreationRequestDTO> =
             HttpRequest.POST("/save",
-                GitrEntityRequestDTO(testRepEntity)
+                GitrEntityCreationRequestDTO(
+                    testRepEntity.gitrName,
+                    testRepEntity.gitrDescription?:"",
+                    testRepEntity.publicity)
                 )
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
@@ -64,7 +69,7 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 //           |
 //          \/
         assertEquals(testRepEntity,savedObjectFromDB)
-        assertEquals(testRepEntity.gitrName,returnedObjectFromEndpoint.toRepositoryEntity().gitrName)
+        assertEquals(testRepEntity.gitrName, (returnedObjectFromEndpoint).gitrName)
 
 
         }
@@ -90,7 +95,7 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 //        println(savedObjectFromDB.toString())
 //        println(returnedObjectFromEndpoint.toString())
 //        println(returnedObjectFromEndpoint.toRepositoryEntity().toString())
-        assertEquals(savedObjectFromDB.gitrOwnerName,returnedObjectFromEndpoint.toRepositoryEntity().gitrOwnerName)
+        assertEquals(savedObjectFromDB.gitrOwnerId,returnedObjectFromEndpoint.gitrOwnerId)
     }
 
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {

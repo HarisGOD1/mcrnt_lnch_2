@@ -8,12 +8,12 @@ import io.micronaut.http.annotation.*
 //import io.micronaut.security.rules.SecurityRule
 import io.micronaut.views.View
 import ru.thegod.gitr.members.services.GitrMembersService
-import ru.thegod.gitr.core.services.GitrService
+import ru.thegod.gitr.core.services.GitrCreationService
 import ru.thegod.security.cookies.service.CookieValidator
 import java.util.*
 
 @Controller("/gits")
-class GitrFormsController(private var service: GitrService,
+class GitrFormsController(private var service: GitrCreationService,
                           private var membersService: GitrMembersService,
                           private  var cookieValidator: CookieValidator) {
 
