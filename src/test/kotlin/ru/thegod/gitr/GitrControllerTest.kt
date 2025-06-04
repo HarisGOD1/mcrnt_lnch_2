@@ -74,6 +74,7 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient) {
 //           |
 //          \/
         assertEquals(savedObjectFromDB,returnedObjectFromEndpoint.toRepositoryEntity())
+        assertEquals(savedObjectFromDB.id,returnedObjectFromEndpoint.toRepositoryEntity().id)
     }
 
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {

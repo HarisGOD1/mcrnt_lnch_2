@@ -53,8 +53,8 @@ dependencies {
     compileOnly("jakarta.persistence:jakarta.persistence-api")              // db part
     runtimeOnly("org.flywaydb:flyway-database-postgresql:11.8.2")           // db part
     runtimeOnly("org.postgresql:postgresql:42.2.14")                        // db part
-    testImplementation("org.testcontainers:postgresql:1.19.0")              // db part
-    testImplementation("org.testcontainers:testcontainers:1.19.0")          // db part
+//    testImplementation("org.testcontainers:postgresql:1.19.0")              // db part
+//    testImplementation("org.testcontainers:testcontainers:1.19.0")          // db part
     annotationProcessor("io.micronaut.data:micronaut-data-processor")       // db part
 
     testImplementation("io.micronaut.test:micronaut-test-junit5")
@@ -85,9 +85,9 @@ micronaut {
         incremental(true)
         annotations("ru.thegod.*")
     }
-    testResources {
-        additionalModules.add("jdbc-postgresql")
-    }
+//    testResources {
+//        additionalModules.add("jdbc-postgresql")
+//    }
     aot {
         // Please review carefully the optimizations enabled below
         // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
@@ -110,7 +110,7 @@ tasks.named<io.micronaut.gradle.docker.NativeImageDockerfile>("dockerfileNative"
 flyway {
 
     cleanDisabled = false
-    url = "jdbc:postgresql://localhost:5432/mcrnt_lnch_db2"
+    url = "jdbc:postgresql://localhost:5433/mcrnt_main"
     user = "postgres"
-    password =
+    password ="thegodpsql_pswd"
 }
