@@ -10,7 +10,6 @@ class UserRolesConverter : AttributeConverter<Set<UserRole>?, Int?> {
             return null
         }
         val total_sum = userRoles.sumOf { userRole -> userRolesMap.get(userRole)!! }
-//        println("CONVERTING FROM $userRoles TO "+total_sum)
         return total_sum
     }
 
@@ -25,17 +24,11 @@ class UserRolesConverter : AttributeConverter<Set<UserRole>?, Int?> {
             if (roleNumberVar%2==1){ // 010 ---> 0 -> 1 -> 1 | exp = 1 -> 2 -> 4
                 roles.add(UserRole.entries[counter])
             }
-//            println(roleNumberVar)
             counter+=1
             roleNumberVar=roleNumberVar/2
         }
-//        println("CONVERTING FROM "+roles)
         return roles
     }
-
-//    companion object {
-//        private const val SEPARATOR = UserRole.ADMIN.
-//    }
 
     val userRolesMap = mapOf(
         UserRole.ADMIN to 1,

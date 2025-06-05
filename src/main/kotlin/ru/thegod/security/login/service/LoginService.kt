@@ -4,21 +4,22 @@ import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Singleton
 import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.authentication.services.PasswordEncryptService
-import ru.thegod.security.cookies.storage.ExpiredTokenStorage
+import ru.thegod.security.cookies.redis.ExpiredTokenStorageService
 import ru.thegod.security.cookies.service.CookieTokenProvider
 import ru.thegod.security.cookies.service.CookieValidator
+import ru.thegod.security.user.services.UserService
 import java.time.Clock
 
 @Singleton
-class LoginService(private val repository: UserRepository,
+class LoginService(private val userService: UserService,
                    private val cookieTokenProvider: CookieTokenProvider,
                    private val cookieValidator: CookieValidator,
-                   private val expiredTokenStorage: ExpiredTokenStorage
+                   private val expiredTokenStorageService: ExpiredTokenStorageService
 ) {
 
     // return user if authorized or returns null
     fun loginReturnToken(username:String, password:String): Cookie? {
-        val user = repository.findByUsername(username) ?: return null
+        val user = userService.findUserByUsername(username) ?: return null
         if(PasswordEncryptService.passwordToHash(password)==user.passwordHash)
             return cookieTokenProvider.releaseCookie(user,"user")
         else return null
@@ -48,11 +49,11 @@ class LoginService(private val repository: UserRepository,
     }
 
     fun replaceCookie(token: Cookie): Cookie {
-        expiredTokenStorage.putSingleExpiredToken(token.value)
+        expiredTokenStorageService.putSingleExpiredToken(token.value)
         return cookieTokenProvider.releaseExpiredCookie()
     }
     fun makeAllCookieDied(username: String): Cookie {
-        expiredTokenStorage.putAllExpiredTime(username, Clock.systemUTC().millis())
+        expiredTokenStorageService.putAllExpiredTime(username, Clock.systemUTC().millis())
         return cookieTokenProvider.releaseExpiredCookie()
     }
 

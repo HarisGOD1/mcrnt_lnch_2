@@ -22,10 +22,10 @@ class UserServiceTest {
 
     @Test
     fun `existed user change password and token invalidates test`(){
-        val userPassword = "ppp"
+        val userPassword = "pppppp"
         val user = TestObjectsProvider.USER_ME
         userRepository.save(user)
-        val newUserPassword = "pppp"
+        val newUserPassword = "ppppppp"
         val token = cookieTokenProvider.releaseCookie(user,"user")
 
         val httpResp = userService.changeUserPassword(user.username,user.passwordHash,newUserPassword)

@@ -9,6 +9,7 @@ import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Produces
 import io.micronaut.views.View
 import ru.thegod.security.registration.services.RegistrationService
+import java.net.URI
 
 @Controller
 class RegistrationController(private val registrationService: RegistrationService) {
@@ -25,7 +26,9 @@ class RegistrationController(private val registrationService: RegistrationServic
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     fun registerNew(username:String,password:String): HttpResponse<Any?> {
-        return registrationService.registerNewUser(username,password)
+        if(!registrationService.registerNewUser(username,password))
+            return HttpResponse.created("Username or password isnt valid")
+        return HttpResponse.redirect(URI("/login"))
 
     }
 }

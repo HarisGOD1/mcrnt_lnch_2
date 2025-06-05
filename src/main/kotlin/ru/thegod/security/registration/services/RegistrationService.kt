@@ -10,24 +10,21 @@ import ru.thegod.security.user.services.UserService
 import java.net.URI
 
 @Singleton
-class RegistrationService(private val userService: UserService,
-                          private val userRepository: UserRepository
+class RegistrationService(private val userService: UserService
 ) {
 
-    fun registerNewUser(username:String, password:String): HttpResponse<Any?> {
+    fun registerNewUser(username:String, password:String): Boolean{
         if (!userService.isUsernameValid(username))
-            return HttpResponse.badRequest()
+            return false
+        if (!userService.isPasswordValid(password))
+            return false
 
+        if(userService.findUserByUsername(username)!=null)
+            return false
 
-        if(userRepository.findByUsername(username)!=null)
-            return HttpResponse.badRequest()
+        userService.saveUser(User(username, password.md5()))
 
-
-        val user = userRepository.save(User(username, password.md5()))
-//        val token = cookieTokenProvider.releaseCookie(user,"user")
-
-        return HttpResponse.redirect<Any?>(URI("/login"))
-//            .cookie(token)
+        return true
     }
 
 

@@ -11,10 +11,10 @@ class ProfileService(private val cookieValidator: CookieValidator) {
 
     fun profilePage(request: HttpRequest<*>): HttpResponse<String> {
         val token = request.cookies["AUTH-TOKEN"]
-        println(token)
+//        println(token)
         if (token != null) {
             val user = cookieValidator.returnUserIfAuthTokenValid(token)
-            println(user)
+//            println(user)
             if (user!=null) {
                 return HttpResponse.ok("Token is valid, ${user.username}\n${user}")
             }

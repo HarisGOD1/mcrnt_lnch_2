@@ -5,9 +5,9 @@ import io.micronaut.http.cookie.Cookie
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import ru.thegod.security.user.models.User
-import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.CryptImpl
-import ru.thegod.security.cookies.storage.ExpiredTokenStorage
+import ru.thegod.security.cookies.redis.ExpiredTokenStorageService
+import ru.thegod.security.user.services.UserService
 import java.time.Clock
 import java.util.Base64
 
@@ -36,8 +36,8 @@ import java.util.Base64
 *       and the other tokens will be not valid in later usage
  */
 @Singleton
-class CookieValidator (private val userRepository: UserRepository,
-                       private val expiredTokenStorage: ExpiredTokenStorage
+class CookieValidator (private val userService: UserService,
+                       private val expiredTokenStorageService: ExpiredTokenStorageService
 ){
     private val objectMapper: ObjectMapper by lazy{
         ObjectMapper()
@@ -56,7 +56,8 @@ class CookieValidator (private val userRepository: UserRepository,
 
         val payloadMap = objectMapper.readValue(payloadJSON, Map::class.java) as? Map<String, Any>
         if(payloadMap==null) return null
-        if(!expiredTokenStorage.getSingleExpiredToken(token.value).isEmpty) return null
+
+        if(!expiredTokenStorageService.getSingleExpiredToken(token.value).isEmpty) return null
 
         val bornTime = getBornTimeFromPayloadMap(payloadMap)
         val username = getUsernameFromPayloadMap(payloadMap)
@@ -65,7 +66,7 @@ class CookieValidator (private val userRepository: UserRepository,
 
         // user may perform invalidation of all his released tokens
         // then we need to check for those tokens, using storage
-        val lastAllExpired=expiredTokenStorage.getAllExpiredTime(username)
+        val lastAllExpired=expiredTokenStorageService.getAllExpiredTime(username)
         if(!lastAllExpired.isEmpty)
             if(bornTime<lastAllExpired.get().toLong())
                 return null
@@ -74,7 +75,7 @@ class CookieValidator (private val userRepository: UserRepository,
         if(Clock.systemUTC().millis()> (bornTime+3600000))
             return null
 
-        val user = userRepository.findByUsername(username) ?: return null
+        val user = userService.findUserByUsername(username) ?: return null
         // security check needed in case if token user
         // changed password, then any other tokens will be invalid
         if (securityHash != user.securityHash()) return null

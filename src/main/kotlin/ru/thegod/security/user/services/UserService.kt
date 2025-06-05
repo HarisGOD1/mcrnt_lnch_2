@@ -21,11 +21,34 @@ class UserService(private val repository: UserRepository)
         }
     }
 
+    fun findUserByUsername(username: String):User?{
+        return repository.findByUsername(username)
+    }
     // [a-z][A-Z][0-9]_
     fun isUsernameValid(username: String):Boolean{
         val regex = Regex("^[a-zA-Z0-9_]+$")
         return regex.matches(username) and (2<username.length) and (username.length<30)
     }
 
+    fun isPasswordValid(password: String):Boolean{
+        if (password.length<6) return false
+        // to do more checks for weaknesses
+        return true
+
+    }
+
+    fun saveUser(user: User):User{
+        return repository.save(user)
+    }
+
+
+    fun getAllUsers():List<User>{
+        return repository.findAll()
+
+    }
+
+    fun deleteAll(){
+        repository.deleteAll()
+    }
 
 }

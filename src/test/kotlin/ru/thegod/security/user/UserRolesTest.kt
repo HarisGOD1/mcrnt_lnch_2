@@ -27,11 +27,8 @@ class UserRolesTest() {
         println("1"+user)
         user.roles.add(UserRole.THIRD_USER)
         userRepository.update(user)
-//        println("2"+userRepository.findAll())
         val userFromDB = userRepository.getById(user.id!!)
         assertNotNull(userFromDB)
-//        println("3"+user)
-//        println("4"+userFromDB.get())
         assertEquals(user,userFromDB.get())
     }
 }

@@ -7,7 +7,7 @@ class UserControllerTest {
 
     fun `test register post endpoint`(){
         val username = "thegod"
-        val userpassword ="ppp"
+        val userpassword ="pppppp"
 
 
     }

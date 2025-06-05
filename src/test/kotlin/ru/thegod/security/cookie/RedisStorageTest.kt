@@ -5,13 +5,13 @@ import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import ru.thegod.security.cookies.storage.ExpiredTokenStorage
+import ru.thegod.security.cookies.redis.ExpiredTokenStorageService
 
 @MicronautTest
 class RedisStorageTest {
 
     @Inject
-    lateinit var storage: ExpiredTokenStorage
+    lateinit var storage: ExpiredTokenStorageService
 
     @BeforeEach
     fun setUp() {

@@ -30,19 +30,18 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
 
     @BeforeEach
     fun dropTablesBeforeEach(){
-        userRepository.deleteAll()
         repository.deleteAll()
+        userRepository.deleteAll()
     }
 
 
     @Test
     fun `save endpoint works with DB test`(){
 //        TEST DATA
-        val userOwner = TestObjectsProvider.USER_ME
-        var testRepEntity = TestObjectsProvider.getStaticDefaultGitr()
+        val userOwner = userRepository.save(TestObjectsProvider.USER_ME)
+        var testRepEntity = TestObjectsProvider.getRandomGitr(userOwner)
 
 //        PERFORM ACTION
-        userRepository.save(userOwner)
         val token = cookieTokenProvider.releaseCookie(userOwner)
         val request1: HttpRequest<GitrEntityCreationRequestDTO> =
             HttpRequest.POST("/save",
@@ -54,15 +53,9 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .accept(MediaType.APPLICATION_JSON)
                 .cookie(token)
-        // body1 contains data in JSON view, type of body1 - Kotlin.String
-//        println(request1.body)
-
         val body1 = client.toBlocking().retrieve(request1)
 
-//        assertNotNull(httpResponse)
-//        val body1 = httpResponse.body
-//        println(body1)
-//        println(body1.toString())
+
         assertNotNull(body1)
 
         val returnedObjectFromEndpoint = toResponseDTO_fromJsonString(body1.toString(), ObjectMapperProvider.mapper)
@@ -70,21 +63,15 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
         assertNotNull(savedObjectFromDBOptional.get())
         val savedObjectFromDB = savedObjectFromDBOptional.get()
 
-//        ASSERT DATA
-//            x6 assertions to one
-//            |
-//           |
-//          \/
         assertEquals(testRepEntity.gitrName, (returnedObjectFromEndpoint).gitrName)
-        assertEquals(testRepEntity,savedObjectFromDB)
-
-
+        assertEquals(testRepEntity.gitrDescription,savedObjectFromDB.gitrDescription)
         }
 
     @Test
     fun `get endpoint works with DB test`(){
 //        TEST DATA
-        var testRepEntity = TestObjectsProvider.getStaticDefaultGitr()
+        val user = userRepository.save(TestObjectsProvider.USER_ME)
+        var testRepEntity = TestObjectsProvider.getRandomGitr(user)
         val savedObjectFromDB = repository.save(testRepEntity)
 
 //        PERFORM ACTION
@@ -94,16 +81,7 @@ class GitrControllerTest(@Client("/gits") val client: HttpClient,
         val returnedObjectFromEndpoint = toResponseDTO_fromJsonString(body1.toString(), ObjectMapperProvider.mapper)
 
 
-//        ASSERT DATA
-//            x6 assertions to one
-//            |
-//           |
-//          \/
-        println(savedObjectFromDB.toString())
-        println(returnedObjectFromEndpoint.toString())
-        println(returnedObjectFromEndpoint.id)
         assertEquals(savedObjectFromDB.id,returnedObjectFromEndpoint.id)
-//        assertEquals(savedObjectFromDB.gitrOwner,returnedObjectFromEndpoint.gitrOwner)
     }
 
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {

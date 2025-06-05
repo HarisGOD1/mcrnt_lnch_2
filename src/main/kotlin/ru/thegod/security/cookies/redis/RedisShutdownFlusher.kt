@@ -1,4 +1,4 @@
-package ru.thegod.security.cookies.storage
+package ru.thegod.security.cookies.redis
 
 import io.lettuce.core.api.StatefulRedisConnection
 import io.micronaut.context.annotation.Requires

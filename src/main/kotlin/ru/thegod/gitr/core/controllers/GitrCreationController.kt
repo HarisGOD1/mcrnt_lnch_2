@@ -4,11 +4,8 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-//import io.micronaut.security.annotation.Secured
-//import io.micronaut.security.rules.SecurityRule
 import jakarta.inject.Inject
 import ru.thegod.gitr.core.dto.GitrEntityCreationRequestDTO
-import ru.thegod.gitr.core.dto.GitrEntityRequestDTO
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.gitr.core.services.GitrCreationService
 import java.util.*

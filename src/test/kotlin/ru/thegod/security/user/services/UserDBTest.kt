@@ -3,15 +3,24 @@ package ru.thegod.security.user.services
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.user.repositories.UserRepository
 
-@MicronautTest
+@MicronautTest(transactional = false)
 class UserDBTest {
     @Inject
     lateinit var userRepository: UserRepository
-
+    @Inject
+    lateinit var gitrRepository: GitrRepository
+    @BeforeEach
+    fun dropTablesBeforeEach(){
+        gitrRepository.deleteAll()
+        userRepository.deleteAll()
+        println("im stupid")
+    }
 
     @Test
     fun `save list dumb test`() {
@@ -21,10 +30,10 @@ class UserDBTest {
                             TestObjectsProvider.getRandomUser(),
         )
 
+        println(listuser)
         val savedListFromDB = userRepository.saveAll(listuser)
 
         println(savedListFromDB)
-        println(listuser)
         Assertions.assertEquals(listuser, savedListFromDB)
 
     }

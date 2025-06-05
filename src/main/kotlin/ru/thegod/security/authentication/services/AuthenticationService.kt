@@ -13,4 +13,8 @@ import jakarta.inject.Singleton
 @Singleton
 class AuthenticationService {
 
+    fun isUserAuthenticatedReturnsPairOfBooleanAndUser(){
+
+    }
+
 }

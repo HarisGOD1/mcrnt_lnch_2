@@ -22,7 +22,7 @@ class LoginServiceTest {
 
     @Test
     fun `test login as existed user returns cookie in Set-Cookie header`(){
-        val userPassword = "ppp"
+        val userPassword = "pppppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
         val token = loginService.loginReturnToken(user.username,userPassword) // TO-DO: make it work with register endpoint
@@ -34,7 +34,7 @@ class LoginServiceTest {
 
     @Test
     fun `test single logout returns expired token`(){
-        val userPassword = "ppp"
+        val userPassword = "pppppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
         val token = loginService.loginReturnToken(user.username,userPassword)// TO-DO: make it work with register endpoint
@@ -50,7 +50,7 @@ class LoginServiceTest {
 
     @Test
     fun `test logout all returns expired token and new token is up to date`(){
-        val userPassword = "ppp"
+        val userPassword = "pppppp"
         val user = TestObjectsProvider.getRandomUser(userPassword)
         userRepository.save(user)
         val tokenFirst = loginService.loginReturnToken(user.username,userPassword)

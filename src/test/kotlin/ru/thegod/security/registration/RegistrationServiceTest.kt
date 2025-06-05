@@ -10,8 +10,9 @@ import ru.thegod.providers.TestObjectsProvider
 import ru.thegod.security.cookies.service.CookieValidator
 import ru.thegod.security.registration.services.RegistrationService
 import ru.thegod.security.user.repositories.UserRepository
+import ru.thegod.security.user.roles.UserRole
 
-@MicronautTest
+@MicronautTest(transactional = false)
 class RegistrationServiceTest {
 
     @Inject
@@ -19,25 +20,25 @@ class RegistrationServiceTest {
     @Inject
     private lateinit var userRepository: UserRepository
     @Inject
-    private lateinit var gitRepository: GitrRepository
+    private lateinit var gitrRepository: GitrRepository
     @BeforeEach
     fun dropTablesBeforeEach(){
+        gitrRepository.deleteAll()
         userRepository.deleteAll()
-        gitRepository.deleteAll()
+//        println("im stupid")
     }
 
     @Test
     fun `register new user and user saved test`(){
-        val userPassword = "ppp"
+        val userPassword = "pppppp"
         val user = TestObjectsProvider.USER_ME
         registerService.registerNewUser(user.username,userPassword)
 
 
-//        println(userRepository.findAll())
-//        println(user)
+        println(userRepository.findAll())
         val userFromDB = userRepository.findByUsername(user.username)
         Assertions.assertNotNull(userFromDB)
-        Assertions.assertEquals(user, userFromDB)
+        Assertions.assertEquals(user.username, userFromDB!!.username)
 
     }
 

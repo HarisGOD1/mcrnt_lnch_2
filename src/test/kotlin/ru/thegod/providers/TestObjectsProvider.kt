@@ -19,10 +19,10 @@ object TestObjectsProvider {
         mutableListOf("Bruno","iliazakharchenia","thegod")
 
     )
-    val USER_ME = User("thegod","ppp".md5())
+    val USER_ME = User(null,"thegod","pppppp".md5(),mutableListOf(),mutableSetOf())
 
     fun getRandomUser():User{
-        return User(null, MEMBERS_LIST.random().random(),"ppp".md5(), mutableListOf())
+        return User(null, MEMBERS_LIST.random().random(),"pppppp".md5(), mutableListOf())
     }
     fun getRandomUser(password:String):User{
         return User(null, MEMBERS_LIST.random().random(),password.md5(), mutableListOf())

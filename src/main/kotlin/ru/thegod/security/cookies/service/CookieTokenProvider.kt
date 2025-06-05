@@ -6,14 +6,13 @@ import io.micronaut.http.cookie.SameSite
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import ru.thegod.security.user.models.User
-import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.cookies.CryptImpl
 import java.time.Clock
 import java.time.Duration
 import java.util.Base64
 
 @Singleton
-class CookieTokenProvider(private val userRepository: UserRepository) {
+class CookieTokenProvider() {
 
     private val objectMapper: ObjectMapper by lazy{
         ObjectMapper()

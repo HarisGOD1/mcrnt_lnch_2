@@ -1,11 +1,11 @@
-package ru.thegod.security.cookies.storage
+package ru.thegod.security.cookies.redis
 
 import io.lettuce.core.api.StatefulRedisConnection
 import jakarta.inject.Singleton
 import java.util.Optional
 
 @Singleton
-class ExpiredTokenStorage(private var redisConnection: StatefulRedisConnection<String, String>) {
+class ExpiredTokenStorageService(private var redisConnection: StatefulRedisConnection<String, String>) {
 
     fun getItem(key: String): Optional<String> {
         return Optional.ofNullable(redisConnection.sync()[key])

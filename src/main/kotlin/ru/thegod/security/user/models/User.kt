@@ -33,7 +33,6 @@ class User(
             var passwordHash:String,
     @MappedProperty("owned_repositories_id_list")
             @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "gitrOwner", cascade = arrayOf(Relation.Cascade.ALL))
-//            Add commentMore actions
             var ownedRepositoriesList:MutableList<GitrEntity> = mutableListOf(),
     @Convert(converter = UserRolesConverter::class)
            @MappedProperty("role_number")
@@ -46,6 +45,8 @@ class User(
                 mutableListOf(),
                 mutableSetOf(DEFAULT_USER)
             )
+
+//     Empty constructor
     constructor() : this(null,"","",mutableListOf(),mutableSetOf())
     override fun toString(): String {
         return "USER ENTITY: $id\n|$username|$ownedRepositoriesList|$roles|\n"
