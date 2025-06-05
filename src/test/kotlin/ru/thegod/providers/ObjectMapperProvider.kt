@@ -7,7 +7,5 @@ import jakarta.inject.Singleton
 object ObjectMapperProvider {
     val mapper: ObjectMapper by lazy {
         ObjectMapper()
-//            .registerModule(com.fasterxml.jackson.module.kotlin.KotlinModule())
-//            .findAndRegisterModules() // optional: picks up all registered Jackson modules
     }
 }

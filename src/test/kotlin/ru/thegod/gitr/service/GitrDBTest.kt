@@ -72,12 +72,8 @@ class GitrDBTest {
 
 
         val testUserFromDB = userRepository.getById(testUser.id!!).get()
-        println(testUserFromDB)
         val testGitrFromDB = gitrRepository.getById(testGitr.id!!)
         assertEquals(testGitrFromDB.get().gitrOwner!!.id,testUserFromDB.id)
-//        assertEquals(testGitrFromDB.get().gitrName,testUserFromDB.ownedRepositoriesIdList.get(0).gitrName)
-//        assertEquals(testGitrFromDB.get().gitrDescription,testUserFromDB.ownedRepositoriesIdList.get(0).gitrDescription)
-//        assertEquals(testGitr.gitrOwner,testUser)
 
 
 

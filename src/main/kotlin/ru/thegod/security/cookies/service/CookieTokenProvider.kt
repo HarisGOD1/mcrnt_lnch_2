@@ -58,6 +58,8 @@ class CookieTokenProvider() {
         return releaseCookie(user, "user")
     }
 
+
+    //TO-DO make it work for given token
     fun releaseExpiredCookie(): Cookie {
         val cookie = Cookie.of("AUTH-TOKEN", "empty")
             .httpOnly(true)

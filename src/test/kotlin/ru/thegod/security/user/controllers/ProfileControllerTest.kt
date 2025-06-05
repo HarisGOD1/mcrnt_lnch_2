@@ -35,7 +35,6 @@ class ProfileControllerTest() {
             .GET<Any?>("/profile")
             .cookie(token)
         val res = client.toBlocking().retrieve(httpReq)
-        println(res)
         Assertions.assertNotNull(res)
     }
 

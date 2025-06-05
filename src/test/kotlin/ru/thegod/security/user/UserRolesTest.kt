@@ -24,7 +24,6 @@ class UserRolesTest() {
     @Test
     fun testDatabaseIsOK(){
         val user = userRepository.save(TestObjectsProvider.USER_ME)
-        println("1"+user)
         user.roles.add(UserRole.THIRD_USER)
         userRepository.update(user)
         val userFromDB = userRepository.getById(user.id!!)

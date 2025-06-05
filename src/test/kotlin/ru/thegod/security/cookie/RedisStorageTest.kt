@@ -36,7 +36,7 @@ class RedisStorageTest {
 
     @Test
     fun `print debug info to tests output`(){
-        println(storage.info())
+        println(storage.info()) // by design
 
     }
 }

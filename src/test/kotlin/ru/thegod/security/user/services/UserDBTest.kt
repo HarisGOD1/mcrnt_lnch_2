@@ -19,7 +19,6 @@ class UserDBTest {
     fun dropTablesBeforeEach(){
         gitrRepository.deleteAll()
         userRepository.deleteAll()
-        println("im stupid")
     }
 
     @Test
@@ -30,10 +29,8 @@ class UserDBTest {
                             TestObjectsProvider.getRandomUser(),
         )
 
-        println(listuser)
         val savedListFromDB = userRepository.saveAll(listuser)
 
-        println(savedListFromDB)
         Assertions.assertEquals(listuser, savedListFromDB)
 
     }

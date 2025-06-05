@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.providers.TestObjectsProvider
+import ru.thegod.security.authentication.services.PasswordEncryptService.md5
 import ru.thegod.security.cookies.service.CookieValidator
 import ru.thegod.security.registration.services.RegistrationService
+import ru.thegod.security.user.models.User
 import ru.thegod.security.user.repositories.UserRepository
 import ru.thegod.security.user.roles.UserRole
 
@@ -25,7 +27,6 @@ class RegistrationServiceTest {
     fun dropTablesBeforeEach(){
         gitrRepository.deleteAll()
         userRepository.deleteAll()
-//        println("im stupid")
     }
 
     @Test
@@ -34,13 +35,34 @@ class RegistrationServiceTest {
         val user = TestObjectsProvider.USER_ME
         registerService.registerNewUser(user.username,userPassword)
 
-
-        println(userRepository.findAll())
         val userFromDB = userRepository.findByUsername(user.username)
         Assertions.assertNotNull(userFromDB)
         Assertions.assertEquals(user.username, userFromDB!!.username)
 
     }
 
+
+    @Test
+    fun `registration with incorrect username is invalid`(){
+        val userPassword = "pppppp"
+        val user = User("sa",userPassword.md5())
+        registerService.registerNewUser(user.username,userPassword)
+
+        val userFromDB = userRepository.findByUsername(user.username)
+        Assertions.assertNull(userFromDB)
+
+    }
+
+
+    @Test
+    fun `registration with incorrect password is invalid`(){
+        val userPassword = "ppp"
+        val user = User("sasasa",userPassword.md5())
+        registerService.registerNewUser(user.username,userPassword)
+
+        val userFromDB = userRepository.findByUsername(user.username)
+        Assertions.assertNull(userFromDB)
+
+    }
 
 }

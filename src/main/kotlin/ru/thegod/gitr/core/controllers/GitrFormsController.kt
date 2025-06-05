@@ -4,8 +4,6 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
-//import io.micronaut.security.annotation.Secured
-//import io.micronaut.security.rules.SecurityRule
 import io.micronaut.views.View
 import ru.thegod.gitr.members.services.GitrMembersService
 import ru.thegod.gitr.core.services.GitrCreationService
@@ -30,7 +28,6 @@ class GitrFormsController(private var service: GitrCreationService,
     @View("gitr/saveGitR.html")
     @Get("/form/saveGitr")
     @Produces(MediaType.TEXT_HTML)
-//    @Secured(SecurityRule.IS_AUTHENTICATED)
     fun getSaveForm(): HttpResponse<String> {
         return HttpResponse.ok()
     }

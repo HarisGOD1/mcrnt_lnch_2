@@ -84,7 +84,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
         assertNotNull(body1)
 
         val returnedObjectFromEndpoint = toResponseDTO_fromJsonString(body1.toString(), ObjectMapperProvider.mapper)
-        val savedObjectId: UUID = returnedObjectFromEndpoint.id!! //UUID.fromString(jsonNode.get("id").asText())
+        val savedObjectId: UUID = returnedObjectFromEndpoint.id!!
 
         val savedObjectFromDBOptional = repository.findById(savedObjectId)
         val savedObjectFromDB = savedObjectFromDBOptional.get()

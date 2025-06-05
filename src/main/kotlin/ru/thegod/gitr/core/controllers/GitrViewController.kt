@@ -7,7 +7,6 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
 import jakarta.inject.Inject
 import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
-import ru.thegod.gitr.core.services.GitrCreationService
 import ru.thegod.gitr.core.services.GitrViewService
 import java.util.UUID
 
