@@ -9,9 +9,12 @@ import java.util.Optional
 import java.util.UUID
 
 @JdbcRepository(dialect= Dialect.POSTGRES)
+@Join(value = "ownedRepositoriesList", type = Join.Type.LEFT_FETCH)
 interface UserRepository: CrudRepository<User, UUID> {
 
     fun findByUsername(username: String?): User?
+
+    @Join(value = "ownedRepositoriesList", type = Join.Type.LEFT_FETCH)
     fun getById(id: UUID): Optional<User>
 
 

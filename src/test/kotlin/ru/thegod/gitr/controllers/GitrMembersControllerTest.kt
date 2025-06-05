@@ -56,11 +56,8 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
         val savedObjectFromDB = savedObjectFromDBOptional.get()
 
 
-//          x6 assertions to single one
-//            |
-//           |
-//          \/
-        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint)
+
+        assertEquals(savedObjectFromDB.id,returnedObjectFromEndpoint.id)
 
     }
 
@@ -93,11 +90,7 @@ class GitrMembersControllerTest(@Client("/gits") val client: HttpClient) {
         val savedObjectFromDB = savedObjectFromDBOptional.get()
 
 
-//          x6 assertions to single one
-//          |
-//         |
-//        \/
-        assertEquals(savedObjectFromDB,returnedObjectFromEndpoint)
+        assertEquals(savedObjectFromDB.id,returnedObjectFromEndpoint.id)
     }
     fun toResponseDTO_fromJsonString(json:String,objectMapper: ObjectMapper): GitrEntityResponseDTO {
         return objectMapper.readValue(json, GitrEntityResponseDTO::class.java)

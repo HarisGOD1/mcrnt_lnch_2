@@ -17,7 +17,7 @@ class GitrCreationService(private val gitrRepository: GitrRepository,
         if (userRequester==null) throw Exception("Username not exist/ not found")
         return GitrEntityResponseDTO(gitrRepository.save(
             GitrEntity(gitrCreationRequestDTO.gitrName,
-                userRequester.id!!,
+                userRequester,
                 gitrCreationRequestDTO.publicity,
                 gitrCreationRequestDTO.gitrDescription)
                 )

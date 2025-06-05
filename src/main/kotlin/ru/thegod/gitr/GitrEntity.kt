@@ -6,7 +6,6 @@ import io.micronaut.data.annotation.Relation
 import io.micronaut.data.model.DataType
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
-import ru.thegod.gitr.core.dto.GitrEntityResponseDTO
 import ru.thegod.security.user.models.User
 import java.util.*
 
@@ -14,32 +13,34 @@ import java.util.*
 @Serdeable
 @MappedEntity
 @Table(name="git_repository_list")
-data class GitrEntity(@Id
+data class GitrEntity(
+    @Id
                       @GeneratedValue
                       val id: UUID? = null,
-                      @MappedProperty("gitr_name")
+    @MappedProperty("gitr_name")
                       val gitrName: String,
-                      @MappedProperty("gitr_owner_id")
-                      val gitrOwnerId: UUID?,// owner user.class -> uuid.class bc of "@Join is bad"
-                      @MappedProperty("publicity")
+    @MappedProperty("gitr_owner_id")
+                      @Relation(value = Relation.Kind.MANY_TO_ONE)
+                      val gitrOwner: User?,// owner user.class -> uuid.class bc of "@Join is bad"
+    @MappedProperty("publicity")
                       var publicity: Boolean,
-                      @MappedProperty("membersnames", type= DataType.STRING_ARRAY)
+    @MappedProperty("membersnames", type= DataType.STRING_ARRAY)
                       var gitrMembersNames: MutableList<String>,
-                      @MappedProperty("gitrepositorydescription")
+    @MappedProperty("gitrepositorydescription")
                       var gitrDescription: String?,
-                      @MappedProperty("lastcommitgenerated")
+    @MappedProperty("lastcommitgenerated")
                       var gitrCommitGenerated: String?
                                ) {
     // minimal constructor
    //
     constructor(gitRepositoryName: String,
-                gitrOwnerId:UUID,
+                gitrOwner:User,
                 publicity: Boolean,
                 repositoryDescription: String?) :
 
             this(null,
                 gitRepositoryName,
-                gitrOwnerId,
+                gitrOwner,
                 publicity,
                 mutableListOf(),
                 repositoryDescription,
@@ -55,8 +56,8 @@ data class GitrEntity(@Id
                     ((this.id == other.id) or (this.id==null && other.id != null)) /* for the case where we wanna check with pre init data*/
                     &&
                     this.gitrName == other.gitrName
-                    &&
-                    this.id==other.id
+//                    &&
+//                    this.id==other.id             // WTF THIS SH..
                     &&
                     this.publicity == other.publicity
                     &&
@@ -78,7 +79,7 @@ data class GitrEntity(@Id
 
 
     override fun toString(): String {
-        return "id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
-               "ownerId:${gitrOwnerId}|"
+        return "GITR ENTITY: id:$id\n|name:$gitrName|description:$gitrDescription|genCommit:$gitrCommitGenerated|"+
+               "ownerId:${  if (gitrOwner==null)"null" else gitrOwner.id}|\n"
     }
 }

@@ -8,10 +8,10 @@ import ru.thegod.gitr.GitrEntity
 import java.util.*
 
 
-//@Join(value = "gitrOwner", type = Join.Type.LEFT_FETCH)
 @JdbcRepository(dialect=Dialect.POSTGRES)
+@Join(value = "gitrOwner", type = Join.Type.LEFT_FETCH)
 interface GitrRepository: CrudRepository<GitrEntity, UUID> {
 
-//    @Join(value = "gitrOwner", type = Join.Type.LEFT_FETCH)
+    @Join(value = "gitrOwner", type = Join.Type.LEFT_FETCH)
     fun getById(id:UUID):Optional<GitrEntity>
 }

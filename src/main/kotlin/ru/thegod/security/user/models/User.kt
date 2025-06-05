@@ -3,54 +3,52 @@ package ru.thegod.security.user.models
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.MappedEntity
 import io.micronaut.data.annotation.MappedProperty
-import io.micronaut.data.model.DataType
+import io.micronaut.data.annotation.Relation
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
+import jakarta.persistence.Convert
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import jakarta.persistence.Transient
+import ru.thegod.gitr.GitrEntity
 import ru.thegod.security.authentication.services.PasswordEncryptService.md5
 import ru.thegod.security.user.roles.UserRole.*
 import ru.thegod.security.user.roles.UserRole
+import ru.thegod.security.user.roles.UserRolesConverter
 import java.util.UUID
 
 @Serdeable
 @Introspected
 @MappedEntity
 @Table(name="user_table")
-class User(@Id
+class User(
+    @Id
             @GeneratedValue
-            val id: UUID?,
-           @MappedProperty("username")
+            var id: UUID?,
+    @MappedProperty("username")
             @Column(unique=true)
-            val username:String,
-           @MappedProperty("password_hash")
+            var username:String,
+    @MappedProperty("password_hash")
             var passwordHash:String,
-           @MappedProperty("owned_repositories_id_list")
-           @ElementCollection(targetClass = UUID::class)
-            val ownedRepositoriesIdList:MutableList<UUID> = mutableListOf(),
-           @ElementCollection(targetClass = UserRole::class, fetch = FetchType.EAGER)
-           @Enumerated(EnumType.STRING)
-           var roles: List<UserRole> = listOf()
-
-//           @Transient
-//            val roles: MutableList<UserRole> = mutableListOf()
+    @MappedProperty("owned_repositories_id_list")
+            @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "gitrOwner", cascade = arrayOf(Relation.Cascade.ALL))
+//            Add commentMore actions
+            var ownedRepositoriesList:MutableList<GitrEntity> = mutableListOf(),
+    @Convert(converter = UserRolesConverter::class)
+           @MappedProperty("role_number")
+           var roles: MutableSet<UserRole> = mutableSetOf()
            ) {
 
 //      default user creation
     constructor(username:String,passwordHash: String):
             this(null,username,passwordHash,
                 mutableListOf(),
-                mutableListOf(DEFAULT_USER)
+                mutableSetOf(DEFAULT_USER)
             )
-
+    constructor() : this(null,"","",mutableListOf(),mutableSetOf())
     override fun toString(): String {
-        return "$id\n|$username|$ownedRepositoriesIdList|$roles|"
+        return "USER ENTITY: $id\n|$username|$ownedRepositoriesList|$roles|\n"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -73,11 +71,11 @@ class User(@Id
             )
             &&
             (
-                    (ownedRepositoriesIdList==other.ownedRepositoriesIdList)
+                    (ownedRepositoriesList==other.ownedRepositoriesList)
                     or
-                    ((ownedRepositoriesIdList.size==other.ownedRepositoriesIdList.size)
+                    ((ownedRepositoriesList.size==other.ownedRepositoriesList.size)
                             &&
-                            (ownedRepositoriesIdList.containsAll(other.ownedRepositoriesIdList)))
+                            (ownedRepositoriesList.containsAll(other.ownedRepositoriesList)))
                     )
             )
         return true
@@ -88,5 +86,6 @@ class User(@Id
     fun securityHash(): String{
         return (username+passwordHash).md5()
     }
+
 
 }

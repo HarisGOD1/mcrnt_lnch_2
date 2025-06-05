@@ -29,21 +29,21 @@ object TestObjectsProvider {
     }
 
     fun getStaticDefaultGitr(): GitrEntity {
-        return GitrEntity(id = null, gitrName = "TestObjectName", USER_ME.id, publicity = true,
+        return GitrEntity(id = null, gitrName = "TestObjectName", USER_ME, publicity = true,
             mutableListOf(),
             gitrDescription = "smt in description", gitrCommitGenerated = null)
     }
 
     fun getRandomGitr(): GitrEntity {
         return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
-            USER_ME.id, publicity = true,
+            USER_ME, publicity = true,
             MEMBERS_LIST.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
             gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }
 
     fun getRandomGitr(owner: User): GitrEntity {
         return GitrEntity(id = null, gitrName = "RandomTestObject"+Random.nextInt(),
-            owner.id, publicity = true,
+            owner, publicity = true,
             MEMBERS_LIST.random().shuffled().take(listOf(1,2,3).random()).toMutableList(),
             gitrDescription = "smt in description"+Random.nextInt(), gitrCommitGenerated = null)
     }

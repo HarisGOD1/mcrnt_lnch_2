@@ -36,7 +36,9 @@ class GitrPageTest(@Client("/gits") val client: HttpClient) {
         val e = repository.save(TestObjectsProvider.getStaticDefaultGitr())
         val cookie = tokenProvider.releaseCookie(user)
 
-        val request: HttpRequest<Any> = HttpRequest.GET<Any?>("/form/addMember/${e.id}").cookie(cookie)
+        val request: HttpRequest<Any> = HttpRequest
+            .GET<Any?>("/form/addMember/${e.id}")
+            .cookie(cookie)
         val body = client.toBlocking().retrieve(request)
         assertNotNull(body)
     }

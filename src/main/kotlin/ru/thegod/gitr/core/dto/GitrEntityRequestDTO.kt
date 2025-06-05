@@ -9,7 +9,6 @@ import ru.thegod.gitr.GitrEntity
 @Serdeable
 data class GitrEntityRequestDTO(val gitrName: String,
                                 val publicity: Boolean, val gitrDescription:String){
-//    constructor(gitrEntity:GitrEntity) : this(gitrEntity.gitrName, gitrEntity.publicity,gitrEntity.gitrDescription!!)
 
 }
 

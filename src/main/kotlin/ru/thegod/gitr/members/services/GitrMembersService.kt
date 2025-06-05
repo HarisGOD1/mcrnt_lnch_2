@@ -16,9 +16,9 @@ class GitrMembersService(private val gitrRepository: GitrRepository,
     fun addMemberInGitr(args: GitrAddMembersListRequestDTO, token: Cookie): GitrEntityResponseDTO?{
         val user = cookieValidator.returnUserIfAuthTokenValid(token)?:return null
         var entity = gitrRepository.findById(args.repositoryId).get()
-//        println(user)
-//        println(entity)
-        if (user.id!=entity.gitrOwnerId) return null
+        if(entity.gitrOwner==null) return null
+
+        if (user.id!=entity.gitrOwner!!.id) return null
 
 
         for (e in args.gitrMembersNames){
@@ -29,16 +29,17 @@ class GitrMembersService(private val gitrRepository: GitrRepository,
 
     fun getMemberListFromGitr(id: UUID,token: Cookie): HttpResponse<Any> {
 
-        val user = cookieValidator.returnUserIfAuthTokenValid(token)
-        if (user==null)
+        val userRequester = cookieValidator.returnUserIfAuthTokenValid(token)
+//        println("+1")
+        if (userRequester==null)
             return HttpResponse.unauthorized()
-
+//        println("+1")
         val gitr = gitrRepository.findById(id)
-            if(gitr.isEmpty) return HttpResponse.badRequest()
 
         if (gitr.isEmpty) return HttpResponse.badRequest()
-        if(gitr.get().gitrOwnerId!=user.id)
+        if(gitr.get().gitrOwner!!.id!=userRequester.id)
             return HttpResponse.badRequest()
+//        println("+1")
 
 
         return HttpResponse.ok(mapOf("repos" to gitr.get()))
