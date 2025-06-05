@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import ru.thegod.gitr.core.GitrRepository
 import ru.thegod.providers.TestObjectsProvider
+import ru.thegod.security.authentication.services.PasswordEncryptService.md5
+import ru.thegod.security.user.models.User
 import ru.thegod.security.user.repositories.UserRepository
 
 @MicronautTest(transactional = false)
@@ -25,8 +27,7 @@ class UserDBTest {
     fun `save list dumb test`() {
         val listuser = mutableListOf(
             TestObjectsProvider.getRandomUser(),
-                            TestObjectsProvider.getRandomUser(),
-                            TestObjectsProvider.getRandomUser(),
+            User("gergherhreherhre","mhrtyrt".md5())
         )
 
         val savedListFromDB = userRepository.saveAll(listuser)

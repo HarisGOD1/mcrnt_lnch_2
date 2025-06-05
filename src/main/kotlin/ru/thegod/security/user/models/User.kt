@@ -74,11 +74,13 @@ class User(
             (
                     (ownedRepositoriesList==other.ownedRepositoriesList)
                     or
-                    ((ownedRepositoriesList.size==other.ownedRepositoriesList.size)
+                    (
+                            (ownedRepositoriesList.size==other.ownedRepositoriesList.size)
                             &&
-                            (ownedRepositoriesList.containsAll(other.ownedRepositoriesList)))
+                            (ownedRepositoriesList.containsAll(other.ownedRepositoriesList))
                     )
             )
+        )
         return true
         else return false
     }
